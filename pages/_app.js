@@ -1,9 +1,18 @@
 import "../styles/globals.css";
 import { useState, useEffect } from "react";
+import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
+import { useStore } from "../store/store";
 
 function MyApp({ Component, pageProps }) {
   const [liffObject, setLiffObject] = useState(null);
   const [liffError, setLiffError] = useState(null);
+  const [id, setId] = useState(null);
+  const [accessToken, setAccessToken] = useState(null);
+
+  const store = useStore();
+  const persistor = persistStore(store);
 
   // Execute liff.init() when the app is initialized
   useEffect(() => {
@@ -15,6 +24,16 @@ function MyApp({ Component, pageProps }) {
         .then(() => {
           console.log("liff.init() done");
           setLiffObject(liff);
+          console.log(liff);
+          // console.log("login test")
+          // liff.login();
+          // console.log("login okay")
+          // const context = liff.getContext()
+          // const liffToken = liff.getAccessToken()
+          // setId(context.userId)
+          // setAccessToken(liffToken)
+          // console.log(id)
+          // console.log(accessToken)
         })
         .catch((error) => {
           console.log(`liff.init() failed: ${error}`);
@@ -32,7 +51,13 @@ function MyApp({ Component, pageProps }) {
   // to page component as property
   pageProps.liff = liffObject;
   pageProps.liffError = liffError;
-  return <Component {...pageProps} />;
+  return (
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <Component {...pageProps} />
+      </PersistGate>
+    </Provider>
+  );
 }
 
 export default MyApp;
