@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { voteSlice } from "../../store/vote"
 import Router from "next/router"
 
-import { ts_to_date } from "../lib/util"
+import { ts_to_date } from "../../lib/util"
 
 
 function Vote() {

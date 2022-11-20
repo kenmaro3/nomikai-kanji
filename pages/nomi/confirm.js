@@ -5,7 +5,7 @@ import { nomiSlice } from "../../store/nomi";
 import Router from "next/router";
 import axios from "axios";
 
-import { ts_to_date } from "../lib/util"
+import { ts_to_date } from "../../lib/util"
 
 function Confirm() {
 

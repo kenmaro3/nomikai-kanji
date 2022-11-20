@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { planSlice } from "../../store/plan"
 import Router from "next/router"
 
-import { ts_to_date } from "../lib/util"
+import { ts_to_date } from "../../lib/util"
 
 
 function NomiElement() {
@@ -75,7 +75,7 @@ function NomiElement() {
             (async () => {
                 const res = await axios.get(`https://localhost:3000/api/plans/${id}`)
                 console.log("🚀 ~ file: [id].js ~ line 18 ~ res", res)
-                if(res.data.datas[0] !== undefined){
+                if (res.data.datas[0] !== undefined) {
 
                     dispatch(planSlice.actions.set(res.data.datas[0]))
                 }
