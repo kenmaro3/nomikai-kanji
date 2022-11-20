@@ -6,15 +6,13 @@ import { PersistGate } from "redux-persist/integration/react";
 import { useStore } from "../store/store";
 
 function MyApp({ Component, pageProps }) {
-  const [liffObject, setLiffObject] = useState(null);
-  const [liffError, setLiffError] = useState(null);
   const [id, setId] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
 
   const store = useStore();
   const persistor = persistStore(store);
 
-  // Execute liff.init() when the app is initialized
+
   useEffect(() => {
     // to avoid `window is not defined` error
     import("@line/liff").then((liff) => {
@@ -22,16 +20,13 @@ function MyApp({ Component, pageProps }) {
       liff
         .init({ liffId: process.env.LIFF_ID })
         .then(() => {
-          console.log("liff.init() done");
-          setLiffObject(liff);
-          console.log(liff);
-          console.log("login test")
-          liff.login();
-          console.log("login okay")
-          const token = liff.getDecodedIDToken()
-          console.log("🚀 ~ file: _app.js ~ line 32 ~ .then ~ token", token)
-          
-          
+
+          if (!liff.isLoggedIn()) {
+            console.log("liff.init() done");
+            liff.login({ redirectUri: location.href });
+            //const token = liff.getDecodedIDToken();
+          }
+
           // const context = liff.getContext()
           // const liffToken = liff.getAccessToken()
           // setId(context.userId)
@@ -46,15 +41,16 @@ function MyApp({ Component, pageProps }) {
               "LIFF Starter: Please make sure that you provided `LIFF_ID` as an environmental variable."
             );
           }
-          setLiffError(error.toString());
         });
     });
   }, []);
 
+  // Execute liff.init() when the app is initialized
+
   // Provide `liff` object and `liffError` object
   // to page component as property
-  pageProps.liff = liffObject;
-  pageProps.liffError = liffError;
+  // pageProps.liff = liffObject;
+  // pageProps.liffError = liffError;
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

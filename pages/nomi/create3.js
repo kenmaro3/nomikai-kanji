@@ -5,7 +5,7 @@ import { nomiSlice } from "../../store/nomi";
 import Router from "next/router";
 
 function CreateNomi3() {
-  const stations_list = [
+  const location_list = [
     "新宿駅",
     "東京駅",
     "渋谷駅",
@@ -15,31 +15,28 @@ function CreateNomi3() {
     "目黒駅",
   ];
 
+  const [location, setLocation] = useState([]);
+
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
 
-  const [stations, setStations] = useState([]);
 
-  const handleUpdate = () => {
-    console.log("dates", dates);
-    const updatedNomi = { ...nomi, dates: dates };
-    dispatch(nomiSlice.actions.updateNomi(updatedNomi));
-  };
+  useEffect(() => {
+    setLocation(nomi.location)
+  }, [nomi]);
+
 
   const goToStep4 = (e) => {
-    handleUpdate();
+    dispatch(nomiSlice.actions.setLocation({ location: location }));
     e.preventDefault();
     //Router.push("/nomi/create4");
-    console.log("nomi", nomi);
+    Router.push("/nomi/create5");
   };
 
   const selectHandler = (e) => {
-    setStations([...stations, e.target.value]);
+    setLocation([...location, e.target.value]);
   };
 
-  useEffect(() => {
-    console.log("name", name);
-  }, [name]);
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
@@ -49,35 +46,35 @@ function CreateNomi3() {
         </span>
         <label
           for="default"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
           Select first choice location
         </label>
         <select
           id="default"
           onChange={(e) => selectHandler(e)}
-          class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           <option selected>Choose a location</option>
-          {stations_list.map((station) => (
-            <option value={station}>{station}</option>
+          {location_list.map((location) => (
+            <option value={location}>{location}</option>
           ))}
         </select>
 
         <label
           for="default"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
           Select second choice location
         </label>
         <select
           id="default"
           onChange={(e) => selectHandler(e)}
-          class="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         >
           <option selected>Choose a location</option>
-          {stations_list.map((station) => (
-            <option value={station}>{station}</option>
+          {location_list.map((location) => (
+            <option value={location}>{location}</option>
           ))}
         </select>
       </label>

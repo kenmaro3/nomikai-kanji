@@ -16,6 +16,7 @@ const handle = app.getRequestHandler()
 
     const expressApp = express()
     expressApp.get('*', (req, res) => handle(req, res))
+    expressApp.post('*', (req, res) => handle(req, res))
 
     const hasCertificates =
         fs.existsSync('./certificates/localhost-key.pem') && fs.existsSync('./certificates/localhost.pem')

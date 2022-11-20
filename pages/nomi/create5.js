@@ -1,45 +1,47 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { nomiSlice } from "../../store/nomi";
 import DatePicker from "react-multi-date-picker";
 import Router from "next/router";
-import { nomiSlice } from "../../store/nomi";
 
-function CreateNomi2() {
+function CreateNomi5() {
+
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
 
-  const [dates, setDates] = useState([]);
+  const [deadline, setDeadline] = useState([]);
 
   useEffect(() => {
-    setDates(nomi.date)
+    setDeadline(nomi.deadline)
   }, [nomi]);
 
   const handleOnChange = (date) => {
+
     console.log("🚀 ~ file: create2.js ~ line 20 ~ handleOnChange ~ e", date)
-    setDates(date)
+    setDeadline(date)
+    dispatch(nomiSlice.actions.setDeadline({ deadline: date }));
 
   };
 
-  const goToStep3 = (e) => {
-    dispatch(nomiSlice.actions.setDate({ date: dates }));
+  const goToConfirm = (e) => {
     e.preventDefault();
-    Router.push("/nomi/create3");
-    console.log("nomi", nomi);
+    Router.push("/nomi/confirm");
   };
+
 
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-          Nomi Dates
+          Deadline for voting
         </span>
-        <DatePicker value={dates} onChange={(date) => handleOnChange(date)} multiple />
+        <DatePicker value={deadline} onChange={(date) => handleOnChange(date)} />
       </label>
 
       <button
-        onClick={(e) => goToStep3(e)}
+        onClick={(e) => goToConfirm(e)}
         className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
       >
         Next
@@ -48,4 +50,4 @@ function CreateNomi2() {
   );
 }
 
-export default CreateNomi2;
+export default CreateNomi5;

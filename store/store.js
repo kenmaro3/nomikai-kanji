@@ -5,6 +5,9 @@ import {
   EnhancedStore,
 } from "@reduxjs/toolkit";
 import { nomiSlice } from "./nomi";
+import { userSlice } from "./user";
+import { voteSlice } from "./vote";
+import { planSlice } from "./plan";
 import {
   persistReducer,
   FLUSH,
@@ -38,6 +41,9 @@ const storage =
 
 const rootReducer = combineReducers({
   nomi: nomiSlice.reducer,
+  user: userSlice.reducer,
+  plan: planSlice.reducer,
+  vote: voteSlice.reducer,
 });
 
 //export type RootState = ReturnType<typeof rootReducer>;

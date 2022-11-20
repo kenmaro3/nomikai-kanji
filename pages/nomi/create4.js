@@ -1,47 +1,49 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import Router from "next/router";
 import { nomiSlice } from "../../store/nomi";
+import Router from "next/router";
 
-function CreateNomi1() {
+function CreateNomi4() {
+
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
 
-  const [name, setName] = useState("");
+  const [passcode, setPasscode] = useState();
 
   useEffect(() => {
-    setName(nomi.name)
+    setPasscode(nomi.passcode)
   }, [nomi]);
 
-  const handleNameOnChange = (e) => {
-    setName(e.target.value);
+
+  const goToStep5 = (e) => {
+    dispatch(nomiSlice.actions.setPasscode({ passcode: passcode }));
+    e.preventDefault();
+    Router.push("/nomi/create5");
   };
 
-  const goToStep2 = (e) => {
-    dispatch(nomiSlice.actions.setName({ name: name }));
-    e.preventDefault();
-    Router.push("/nomi/create2");
-    console.log("nomi", nomi);
+  const handleInputChange = (e) => {
+    setPasscode(e.target.value);
   };
+
 
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-          Nomi Name
+          passcode
         </span>
         <input
           type="text"
           className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-          placeholder="crazy nomi"
-          value={name}
-          onChange={handleNameOnChange}
+          placeholder="mypasscode"
+          value={passcode}
+          onChange={(e) => handleInputChange(e)}
         />
       </label>
 
       <button
-        onClick={(e) => goToStep2(e)}
+        onClick={(e) => goToStep5(e)}
         className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-4"
       >
         Next
@@ -50,4 +52,4 @@ function CreateNomi1() {
   );
 }
 
-export default CreateNomi1;
+export default CreateNomi4;
