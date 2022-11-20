@@ -25,9 +25,13 @@ function MyApp({ Component, pageProps }) {
           console.log("liff.init() done");
           setLiffObject(liff);
           console.log(liff);
-          // console.log("login test")
-          // liff.login();
-          // console.log("login okay")
+          console.log("login test")
+          liff.login();
+          console.log("login okay")
+          const token = liff.getDecodedIDToken()
+          console.log("🚀 ~ file: _app.js ~ line 32 ~ .then ~ token", token)
+          
+          
           // const context = liff.getContext()
           // const liffToken = liff.getAccessToken()
           // setId(context.userId)

@@ -1,6 +1,8 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
+import { nomiSlice } from "../../store/nomi";
+import Router from "next/router";
 
 function CreateNomi3() {
   const stations_list = [
@@ -18,18 +20,17 @@ function CreateNomi3() {
 
   const [stations, setStations] = useState([]);
 
-  const handleNameOnChange = (e) => {
-    setName(e.target.value);
-  };
-
   const handleUpdate = () => {
-    nomi.stations = stations;
-    dispatch(userSlice.actions.updateNomi());
+    console.log("dates", dates);
+    const updatedNomi = { ...nomi, dates: dates };
+    dispatch(nomiSlice.actions.updateNomi(updatedNomi));
   };
 
   const goToStep4 = (e) => {
+    handleUpdate();
     e.preventDefault();
-    Router.push("/nomi/create4");
+    //Router.push("/nomi/create4");
+    console.log("nomi", nomi);
   };
 
   const selectHandler = (e) => {
@@ -39,6 +40,7 @@ function CreateNomi3() {
   useEffect(() => {
     console.log("name", name);
   }, [name]);
+
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">

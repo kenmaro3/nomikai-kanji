@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import DatePicker from "react-multi-date-picker";
 import Router from "next/router";
+import { nomiSlice } from "../../store/nomi";
 
 function CreateNomi2() {
   const nomi = useSelector((state) => state.nomi);
@@ -12,17 +13,22 @@ function CreateNomi2() {
   const [value, setValue] = useState([]);
 
   const handleNameOnChange = (e) => {
-    setName(e.target.value);
+    setDates(e.target.value);
   };
 
   const handleUpdate = () => {
-    nomi.dates = dates;
-    dispatch(userSlice.actions.updateNomi());
+    console.log("before", nomi);
+    const updatedNomi = { ...nomi, dates: ["2", "3"] };
+    //const updatedNomi = Object.assign(nomi, {dates: ["2", "3"]})
+    console.log("updatedNomi", updatedNomi);
+    dispatch(nomiSlice.actions.updateNomi(updatedNomi));
   };
 
   const goToStep3 = (e) => {
+    handleUpdate();
     e.preventDefault();
     Router.push("/nomi/create3");
+    console.log("nomi", nomi);
   };
 
   useEffect(() => {

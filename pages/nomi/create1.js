@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Router from "next/router";
+import { nomiSlice } from "../../store/nomi";
 
 function CreateNomi1() {
   const nomi = useSelector((state) => state.nomi);
@@ -13,13 +14,18 @@ function CreateNomi1() {
     setName(e.target.value);
   };
   const handleUpdate = () => {
-    nomi.name = name;
-    dispatch(userSlice.actions.updateNomi(nomi));
+    //const updatedNomi = Object.assign(nomi, {name: name})
+    console.log("this is nomi", nomi);
+    const updatedNomi = { ...nomi, name: name };
+    console.log("updatedNomi", updatedNomi);
+    dispatch(nomiSlice.actions.updateNomi(updatedNomi));
   };
 
   const goToStep2 = (e) => {
+    handleUpdate();
     e.preventDefault();
     Router.push("/nomi/create2");
+    console.log("nomi", nomi);
   };
 
   useEffect(() => {
