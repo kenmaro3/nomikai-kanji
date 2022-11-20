@@ -75,7 +75,10 @@ function NomiElement() {
             (async () => {
                 const res = await axios.get(`https://localhost:3000/api/plans/${id}`)
                 console.log("🚀 ~ file: [id].js ~ line 18 ~ res", res)
-                dispatch(planSlice.actions.set(res.data.datas[0]))
+                if(res.data.datas[0] !== undefined){
+
+                    dispatch(planSlice.actions.set(res.data.datas[0]))
+                }
             })()
         }
     }, [id])

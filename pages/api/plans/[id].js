@@ -14,7 +14,12 @@ export default function handler(req, res) {
 
     case "POST": {
       const { passcode } = req.body
-      const data_f = datas.filter((data) => data.id == id)
+
+      console.log("\n\nhere!!!!")
+      console.log("🚀 ~ file: [id].js ~ line 19 ~ handler ~ datas", datas)
+      const data_f = datas.filter((data) => {
+        return data.id == id
+      })
       console.log("\n\n======hereeee")
       console.log(passcode)
       console.log(data_f[0])

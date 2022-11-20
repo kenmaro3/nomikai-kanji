@@ -43,6 +43,7 @@ export default function Home(props) {
             dispatch(userSlice.actions.setName(profile.displayName));
             dispatch(userSlice.actions.setUrl(profile.pictureUrl));
             dispatch(userSlice.actions.setId(profile.userId));
+
           })
           .catch((err) => {
             console.log("error", err);

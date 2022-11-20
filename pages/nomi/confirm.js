@@ -28,24 +28,26 @@ function Confirm() {
   };
 
   useEffect(() => {
-    import("@line/liff").then((liff) => {
-      console.log("start liff.init()...");
-      if (liff.ready) {
-        liff.permanentLink
-          .createUrlBy(`https://localhost:3000/nomi/${id}`)
-          .then((permanentLink) => {
-            // https://liff.line.me/1234567890-AbcdEfgh
-            console.log(permanentLink);
-            setShareUrl(permanentLink)
-          });
+    // import("@line/liff").then((liff) => {
+    //   console.log("start liff.init()...");
+    //   if (liff.ready) {
+    //     liff.permanentLink
+    //       .createUrlBy(`https://localhost:3000/nomi/${id}`)
+    //       .then((permanentLink) => {
+    //         // https://liff.line.me/1234567890-AbcdEfgh
+    //         console.log(permanentLink);
+    //         setShareUrl(permanentLink)
+    //       });
+
+    //   }
+    // });
+
+    setShareUrl(`https://localhost:3000/nomi/${id}`)
 
 
-      }
-
-    });
 
 
-  })
+  }, id)
 
   const goToModify = (e) => {
     e.preventDefault();
@@ -74,49 +76,61 @@ function Confirm() {
 
   const goBackToPlan = (e) => {
     e.preventDefault()
+    sendMessageViaTargetPicker()
     setModal(false)
-    Router.push(`/plans/${res.id}`)
+    Router.push(`/nomi/${id}`)
   }
 
   const sendMessageViaTargetPicker = () => {
     import("@line/liff").then((liff) => {
       console.log("start liff.init()...");
       if (liff.ready) {
-        liff.shareTargetPicker(
-          [
+        if (liff.isApiAvailable("shareTargetPicker")) {
+          console.log("liff is ready for sending message")
+          liff.shareTargetPicker(
+            [
+              {
+                type: "text",
+                text: "Hello, World!",
+              },
+            ],
             {
-              type: "text",
-              text: "Hello, World!",
-            },
-          ],
-          {
-            isMultiple: true,
-          }
-        )
-          .then(function (res) {
-            if (res) {
-              // succeeded in sending a message through TargetPicker
-              console.log(`[${res.status}] Message sent!`)
-            } else {
-              const [majorVer, minorVer] = (liff.getLineVersion() || "").split('.');
-              if (parseInt(majorVer) == 10 && parseInt(minorVer) < 11) {
-                // LINE 10.3.0 - 10.10.0
-                // Old LINE will access here regardless of user's action
-                console.log('TargetPicker was opened at least. Whether succeeded to send message is unclear')
-              } else {
-                // LINE 10.11.0 -
-                // sending message canceled
-                console.log('TargetPicker was closed!')
-              }
+              isMultiple: true,
             }
-          }).catch(function (error) {
-            // something went wrong before sending a message
-            console.log('something wrong happen')
-          })
+          )
+            .then(function (res) {
+              if (res) {
+                // succeeded in sending a message through TargetPicker
+                console.log(`[${res.status}] Message sent!`)
+              } else {
+                const [majorVer, minorVer] = (liff.getLineVersion() || "").split('.');
+                if (parseInt(majorVer) == 10 && parseInt(minorVer) < 11) {
+                  // LINE 10.3.0 - 10.10.0
+                  // Old LINE will access here regardless of user's action
+                  console.log('TargetPicker was opened at least. Whether succeeded to send message is unclear')
+                } else {
+                  // LINE 10.11.0 -
+                  // sending message canceled
+                  console.log('TargetPicker was closed!')
+                }
+              }
+            }).catch(function (error) {
+              // something went wrong before sending a message
+              console.log('something wrong happen')
+            })
+
+        } else {
+          console.log("api not available")
+        }
+
+      } else {
+
+        console.log("liff is not ready")
       }
 
-
     });
+
+
   }
 
 
@@ -177,7 +191,7 @@ function Confirm() {
             <div className="py-6 px-6 lg:px-8">
               <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white"></h3>
               <div>share url</div>
-              <div>{shareUrl}}</div>
+              <div>{shareUrl}</div>
 
               <div>passcode</div>
               <div>{passcode}</div>
