@@ -57,7 +57,8 @@ function Confirm() {
   const goToOk = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post("https://localhost:3000/api/plans", {
+    //const res = await axios.post("https://localhost:3000/api/plans", {
+    const res = await axios.post("/api/plans", {
       name: nomi.name,
       date: nomi.date,
       location: nomi.location,

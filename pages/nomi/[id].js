@@ -43,7 +43,8 @@ function NomiElement() {
         setError(false)
 
         if (passcode !== undefined) {
-            const res = await axios.post(`https://localhost:3000/api/plans/${id}`, {
+            //const res = await axios.post(`https://localhost:3000/api/plans/${id}`, {
+            const res = await axios.post(`/api/plans/${id}`, {
                 passcode: passcode
             })
 
@@ -73,7 +74,8 @@ function NomiElement() {
 
         if (id !== undefined) {
             (async () => {
-                const res = await axios.get(`https://localhost:3000/api/plans/${id}`)
+                //const res = await axios.get(`https://localhost:3000/api/plans/${id}`)
+                const res = await axios.get(`/api/plans/${id}`)
                 console.log("🚀 ~ file: [id].js ~ line 18 ~ res", res)
                 if (res.data.datas[0] !== undefined) {
 

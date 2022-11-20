@@ -57,7 +57,8 @@ export default function Home(props) {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get("https://localhost:3000/api/plans")
+      //const res = await axios.get("https://localhost:3000/api/plans")
+      const res = await axios.get("/api/plans")
       const res_data = await res.data
       console.log("🚀 ~ file: index.js ~ line 58 ~ res", res_data)
       if (res_data !== undefined) {
