@@ -18,12 +18,13 @@ function MyApp({ Component, pageProps }) {
     import("@line/liff").then((liff) => {
       console.log("start liff.init()...");
       liff
-        .init({ liffId: process.env.LIFF_ID })
+        .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID })
         .then(() => {
 
           if (!liff.isLoggedIn()) {
             console.log("liff.init() done");
-            liff.login({ redirectUri: location.href });
+            //liff.login({ redirectUri: location.href });
+            liff.login();
             //const token = liff.getDecodedIDToken();
           }
 

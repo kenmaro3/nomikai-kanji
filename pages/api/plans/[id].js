@@ -27,11 +27,14 @@ export default function handler(req, res) {
         res.status(404).json({ res: "plan not found" })
 
       }
-      if (passcode === data_f[0].passcode) {
-        res.status(200).json({ res: "good" })
-      }
       else {
-        res.status(200).json({ res: "bad" })
+        if (passcode === data_f[0].passcode) {
+          res.status(200).json({ res: "good" })
+        }
+        else {
+          res.status(200).json({ res: "bad" })
+        }
+
       }
 
     }

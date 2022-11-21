@@ -13,3 +13,11 @@ npm run dev
 # or
 yarn dev
 ```
+
+https server at local
+
+ref: https://zenn.dev/jiyuujin/articles/liff-on-nextjs
+
+```
+HTTPS=true node ./server.js
+```

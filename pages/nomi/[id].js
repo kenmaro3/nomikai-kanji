@@ -122,14 +122,14 @@ function NomiElement() {
                         <p className="text-slate-500 group-hover:text-white text-sm">Host: {plan?.host}</p>
                         <p className="text-slate-500 group-hover:text-white text-sm">Vote Deadline: {ts_to_date(plan?.deadline)}</p>
                     </a>
-                    {/* <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+                    <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">
                             <h3>🍻 Venue Voting</h3>
                             <h3 className="text-slate-900 group-hover:text-white text-sm font-semibold">{plan?.name}</h3>
                         </div>
                         <p className="text-slate-500 group-hover:text-white text-sm">Host: {plan?.host}</p>
                         <p className="text-slate-500 group-hover:text-white text-sm">Deadline: {ts_to_date(plan?.deadline)}</p>
-                    </a> */}
+                    </a>
 
                     {/* <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex items-center space-x-3">
