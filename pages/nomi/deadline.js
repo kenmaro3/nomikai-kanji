@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { nomiSlice } from "../../store/nomi";
 import DatePicker from "react-multi-date-picker";
-import Router from "next/router";
+import { useRouter } from "next/router"
 
-function CreateNomi5() {
+function NomiDeadline() {
+  const router = useRouter()
 
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
@@ -25,8 +26,11 @@ function CreateNomi5() {
   };
 
   const goToConfirm = (e) => {
+    if (deadline === null || deadline === undefined) {
+      return
+    }
     e.preventDefault();
-    Router.push("/nomi/confirm");
+    router.push("/nomi/confirm");
   };
 
 
@@ -34,10 +38,12 @@ function CreateNomi5() {
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
-        <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
-          Deadline for voting
+        <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
+          回答締め切り日
         </span>
-        <DatePicker value={deadline} onChange={(date) => handleOnChange(date)} />
+        <div className="mt-3 mb-3">
+          <DatePicker value={deadline} onChange={(date) => handleOnChange(date)} />
+        </div>
       </label>
 
       <button
@@ -50,4 +56,4 @@ function CreateNomi5() {
   );
 }
 
-export default CreateNomi5;
+export default NomiDeadline;

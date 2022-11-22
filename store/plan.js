@@ -5,6 +5,7 @@ const initialState = {
     name: null,
     host: null,
     location: [],
+    venue: [],
     date: [],
     deadline: null,
     host_id: null,
@@ -22,9 +23,10 @@ export const planSlice = createSlice({
             state.id = action.payload.id
             state.name = action.payload.name
             state.location = action.payload.location
+            state.venue = action.payload.venue
             state.host = action.payload.host
             state.deadline = action.payload.deadline
             state.date = action.payload.date
-        }
+        },
     }
 })

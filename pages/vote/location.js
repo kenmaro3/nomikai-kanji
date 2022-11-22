@@ -5,46 +5,64 @@ import { useState, useEffect } from "react"
 
 import { useDispatch, useSelector } from "react-redux";
 import { voteSlice } from "../../store/vote"
-import Router from "next/router"
+
+import { distinct } from "../../lib/util"
 
 
 function Location() {
+  const router = useRouter()
   const plan = useSelector((state) => state.plan);
   const vote = useSelector((state) => state.vote);
   const dispatch = useDispatch();
 
   const [locationS, setLocationS] = useState([]);
-
-  useEffect(() => {
-    let tmp = []
-    plan.location.forEach((el, i) => tmp.push(false))
-    setLocationS(tmp)
-    console.log("🚀 ~ file: [id].js ~ line 23 ~ useEffect ~ locationS", locationS)
+  const [locationBoolean, setLocationBoolean] = useState([false, false])
 
 
-  }, [plan])
+
 
   const handleSelected = (e, i) => {
     console.log("selected", i)
-    //setLocationS({ ...locationS, i: !currentSelection })
-    let tmp = locationS
-    tmp[i] = !tmp[i]
-    setLocationS(tmp)
+    console.log("🚀 ~ file: location.js ~ line 27 ~ handleSelected ~ locationBoolean", locationBoolean)
+
+    let tmpBoolean = [...locationBoolean]
+    tmpBoolean[i] = !tmpBoolean[i]
+    console.log("🚀 ~ file: location.js ~ line 32 ~ handleSelected ~ tmpBoolean", tmpBoolean)
+
+    if (tmpBoolean[i]) {
+      let tmp = [...locationS, plan.location[i]]
+      console.log("🚀 ~ file: location.js ~ line 34 ~ handleSelected ~ tmp", tmp)
+      setLocationS(tmp.filter(distinct))
+      dispatch(voteSlice.actions.setLocation(tmp.filter(distinct)));
+    }
+    else {
+      let index = locationS.indexOf(plan.location[i])
+      let tmp = [...locationS]
+      console.log("🚀 ~ file: location.js ~ line 41 ~ handleSelected ~ tmp", tmp)
+      tmp.splice(index, 1)
+      console.log("🚀 ~ file: location.js ~ line 43 ~ handleSelected ~ tmp", tmp)
+      setLocationS(tmp)
+      dispatch(voteSlice.actions.setLocation(tmp));
+
+    }
+    //dispatch(voteSlice.actions.setLocation(tmp));
     const el = document.getElementById(`list-radio-${i}`);
-    el.checked = tmp[i]
-    console.log("🚀 ~ file: [id].js ~ line 28 ~ handleSelected ~ locationS", locationS)
+    el.checked = tmpBoolean[i]
+    setLocationBoolean(tmpBoolean)
+    console.log("🚀 ~ file: location.js ~ line 52 ~ handleSelected ~ tmpBoolean", tmpBoolean)
   }
 
-  const goToConfirm = (e) => {
+  const goToNext = (e) => {
     e.preventDefault()
     console.log("vote location confirm: ", locationS)
-    dispatch(voteSlice.actions.setLocation(locationS));
-    Router.push("/vote/confirm")
+    router.push("/vote/venue")
   }
   return (
     <div className="flex flex-col h-screen items-center justify-center">
       <label className="block">
-        <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Nomi Location</h3>
+        <span className="mb-2 block text-lg font-medium text-slate-700">
+          場所に投票
+        </span>
         <ul className="w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
           {plan.location.map((el, i) => (
 
@@ -59,7 +77,7 @@ function Location() {
       </label>
 
       <button
-        onClick={(e) => goToConfirm(e)}
+        onClick={(e) => goToNext(e)}
         className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-3"
       >
         Next

@@ -2,9 +2,10 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { nomiSlice } from "../../store/nomi";
-import Router from "next/router";
+import { useRouter } from "next/router"
 
 function CreateNomi4() {
+  const router = useRouter()
 
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ function CreateNomi4() {
   const goToStep5 = (e) => {
     dispatch(nomiSlice.actions.setPasscode({ passcode: passcode }));
     e.preventDefault();
-    Router.push("/nomi/create5");
+    router.push("/nomi/create5");
   };
 
   const handleInputChange = (e) => {

@@ -4,6 +4,7 @@ const initialState = {
   name: null,
   location: [],
   date: [],
+  venue: [["", "", ""], ["", "", ""]],
   passcode: null,
   deadline: null,
   host_id: null,
@@ -31,6 +32,14 @@ export const nomiSlice = createSlice({
     },
     setHostId(state, action) {
       state.host_id = action.payload
+    },
+    setVenue(state, action) {
+      state.venue = action.payload
+    },
+    setVenueSpecific(state, action) {
+      console.log("here")
+      console.log(state.venue[0])
+      state.venue[action.payload.placeIndex][action.payload.venueIndex] = action.payload.value
     },
     // addHistory(state, action) {
     //   state.user.history.push(action.payload)

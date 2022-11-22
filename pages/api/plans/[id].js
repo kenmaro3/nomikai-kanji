@@ -4,15 +4,14 @@ export default function handler(req, res) {
   const method = req.method;
   const { id } = req.query
 
-  switch (method) {
-    case "GET": {
+  if(method == "GET"){
+    console.log("datas")
+    console.log(datas)
+    const data_f = datas.filter((data) => data.id == id)
+    res.status(200).json({ datas: data_f })
 
-      const data_f = datas.filter((data) => data.id == id)
-      res.status(200).json({ datas: data_f })
-
-    }
-
-    case "POST": {
+  }
+  else{
       const { passcode } = req.body
 
       console.log("\n\nhere!!!!")
@@ -37,12 +36,6 @@ export default function handler(req, res) {
 
       }
 
-    }
-
-    default: {
-
-      res.status(200).json({ name: "default" })
-    }
   }
 
 }

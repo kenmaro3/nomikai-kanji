@@ -5,12 +5,12 @@ import { useState, useEffect } from "react"
 
 import { useDispatch, useSelector } from "react-redux";
 import { voteSlice } from "../../store/vote"
-import Router from "next/router"
 
 import { ts_to_date } from "../../lib/util"
 
 
 function Vote() {
+  const router = useRouter()
   const plan = useSelector((state) => state.plan);
   const vote = useSelector((state) => state.vote);
   const user = useSelector((state) => state.user);
@@ -42,9 +42,10 @@ function Vote() {
   const handleSelected = (e, i) => {
     console.log("selected", i)
     //setDateS({ ...dateS, i: !currentSelection })
-    let tmp = dateS
+    let tmp = [...dateS]
     tmp[i] = !tmp[i]
     setDateS(tmp)
+    dispatch(voteSlice.actions.setDate(tmp));
     const el = document.getElementById(`list-radio-${i}`);
     el.checked = tmp[i]
     console.log("🚀 ~ file: [id].js ~ line 28 ~ handleSelected ~ dateS", dateS)
@@ -52,8 +53,7 @@ function Vote() {
 
   const goToLocationVote = (e) => {
     e.preventDefault()
-    dispatch(voteSlice.actions.setDate(dateS));
-    Router.push("/vote/location")
+    router.push("/vote/location")
   }
 
   return (

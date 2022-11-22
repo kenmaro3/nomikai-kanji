@@ -2,12 +2,13 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { nomiSlice } from "../../store/nomi";
-import Router from "next/router";
+import { useRouter } from 'next/router'
 import axios from "axios";
 
 import { ts_to_date } from "../../lib/util"
 
 function Confirm() {
+  const router = useRouter()
 
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ function Confirm() {
 
   const goToModify = (e) => {
     e.preventDefault();
-    Router.push("/nomi/create1");
+    router.push("/nomi/create1");
   };
 
   const goToOk = async (e) => {
@@ -62,6 +63,7 @@ function Confirm() {
       name: nomi.name,
       date: nomi.date,
       location: nomi.location,
+      venue: nomi.venue,
       deadline: nomi.deadline,
       host_id: nomi.host_id,
     })
@@ -79,7 +81,7 @@ function Confirm() {
     e.preventDefault()
     sendMessageViaTargetPicker()
     setModal(false)
-    Router.push(`/nomi/${id}`)
+    router.push(`/nomi/${id}`)
   }
 
   const sendMessageViaTargetPicker = () => {
@@ -92,7 +94,7 @@ function Confirm() {
             [
               {
                 type: "text",
-                text: "Hello, World!",
+                text: `What's up guys🦧 Nomikai Kanji からのご連絡です!! \nInvitation link ${shareUrl} \nPasscode: ${passcode}`,
               },
             ],
             {
@@ -144,40 +146,65 @@ function Confirm() {
       {!modal ?
         <div>
           <label className="block">
-            <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+            <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
               Confirmation
             </span>
-            <div className="flex flex-col">
-              <div>name: {nomi.name}</div>
-              <div>date:
-                {nomi.date?.map((el) => (<div>{ts_to_date(el)}</div>))}
+            <div className="flex flex-row">
+              <div className="mx-2 flex flex-col">
+                <div className="mt-1 text-md font-medium text-slate-800">飲み会名: <span className="text-md text-slate-600">{nomi.name}</span></div>
+                <div className="mt-1 text-md font-medium text-slate-800">日時:
+                  <span className="text-md text-slate-600">{nomi.date?.map((el) => (<div>{ts_to_date(el)}</div>))}</span>
+                </div>
+                <div className="mt-1 text-md font-medium text-slate-800">場所:
+                  <span className="text-md text-slate-600">{nomi.location?.map((el) => (<div>{el}</div>))}</span>
+                </div>
 
               </div>
-              <div>location:
-                {nomi.location?.map((el) => (<div>{el}</div>))}
-              </div>
-              <div>deadline:
-                {/* {nomi.deadline?.map((el) => (<div>{ts_to_date(el)}</div>))} */}
-                <div>{ts_to_date(nomi.deadline)}</div>
 
+              <div className="mr-2 ml-4 flex flex-col">
+                <div className="mt-1 text-md font-medium text-slate-800">お店候補:
+                  {
+                    nomi.venue.map((placeElement) => (
+                      <div>
+                        <div>
+                          <a href={placeElement[0]} className="text-md text-slate-600">{placeElement[0]}</a>
+                        </div>
+
+                        <div>
+                          <a href={placeElement[1]} className="text-md text-slate-600">{placeElement[1]}</a>
+                        </div>
+
+                        <div>
+                          <a href={placeElement[2]} className="text-md text-slate-600">{placeElement[2]}</a>
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
+
+                <div className="mt-1 text-md font-medium text-slate-800">回答締め切り:
+                  {/* {nomi.deadline?.map((el) => (<div>{ts_to_date(el)}</div>))} */}
+                  <div className="text-md text-slate-600">{ts_to_date(nomi.deadline)}</div>
+                </div>
+                {/* <div>passcode: {nomi.passcode}</div> */}
               </div>
-              {/* <div>passcode: {nomi.passcode}</div> */}
+
             </div>
           </label>
 
-          <div>
+          <div className="text-center">
             <button
               onClick={(e) => goToModify(e)}
-              className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
+              className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-4 mr-2"
             >
-              Modify
+              修正
             </button>
 
             <button
               onClick={(e) => goToOk(e)}
               className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
             >
-              Ok
+              OK
             </button>
           </div>
 

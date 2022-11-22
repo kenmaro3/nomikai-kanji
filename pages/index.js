@@ -1,7 +1,7 @@
 import Head from "next/head";
 import packageJson from "../package.json";
 import { useState, useEffect } from "react";
-import Router from "next/router";
+import { useRouter } from "next/router"
 import axios from "axios"
 import Link from "next/link"
 
@@ -17,6 +17,8 @@ export default function Home(props) {
    *
    *  Learn more about LIFF API documentation (https://developers.line.biz/en/reference/liff)
    **/
+
+  const router = useRouter()
 
   const [name, setName] = useState()
   const [pictureUrl, setPictureUrl] = useState()
@@ -72,7 +74,7 @@ export default function Home(props) {
     e.preventDefault();
     dispatch(nomiSlice.actions.reset())
     dispatch(nomiSlice.actions.setHostId(user.id))
-    Router.push("/nomi/create1");
+    router.push("/nomi/name");
   };
 
   return (
@@ -82,7 +84,7 @@ export default function Home(props) {
       </Head>
 
       <div className="flex flex-col h-screen items-center justify-center">
-        <h1 className="text-3xl font-bold">Welcome to Nomikai Starter</h1>
+        <h1 className="text-xl font-bold px-3 py-2 shadow-md mb-3">Nomikai Kanji</h1>
 
         <div className="my-2 p-2 flex items-center justify-center border border-zinc-300 rounded">
           <img
@@ -92,13 +94,13 @@ export default function Home(props) {
             src={pictureUrl}
             alt=""
           />
-          <div>welcome, {name}</div>
+          <div>{name}</div>
         </div>
         <button
           onClick={(e) => createNomikai(e)}
           className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
         >
-          Create New Nomikai
+          新規 Nomikai 作成🍻
         </button>
 
         <div className="p-2 flex flex-col items-center justify-center">
