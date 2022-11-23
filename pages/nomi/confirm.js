@@ -29,25 +29,7 @@ function Confirm() {
   };
 
   useEffect(() => {
-    // import("@line/liff").then((liff) => {
-    //   console.log("start liff.init()...");
-    //   if (liff.ready) {
-    //     liff.permanentLink
-    //       .createUrlBy(`https://localhost:3000/nomi/${id}`)
-    //       .then((permanentLink) => {
-    //         // https://liff.line.me/1234567890-AbcdEfgh
-    //         console.log(permanentLink);
-    //         setShareUrl(permanentLink)
-    //       });
-
-    //   }
-    // });
-
-    setShareUrl(`https://localhost:3000/nomi/${id}`)
-
-
-
-
+    setShareUrl(`${process.env.NEXT_PUBLIC_URL}nomi/${id}`)
   }, id)
 
   const goToModify = (e) => {
@@ -58,7 +40,6 @@ function Confirm() {
   const goToOk = async (e) => {
     e.preventDefault();
 
-    //const res = await axios.post("https://localhost:3000/api/plans", {
     const res = await axios.post("/api/plans", {
       name: nomi.name,
       date: nomi.date,
