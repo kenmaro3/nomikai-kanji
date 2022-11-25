@@ -87,7 +87,7 @@ function VoteResult() {
                                             {
                                                 dateUrl[key] &&
                                                 dateUrl[key].map((url) => (
-                                                    <div className="ml-1 -mr-8 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
+                                                    <div className="ml-1 -mr-9 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
                                                         <Image
                                                             width="30"
                                                             height="30"
@@ -118,7 +118,7 @@ function VoteResult() {
                                             {
                                                 timeUrl[key] &&
                                                 timeUrl[key].map((url) => (
-                                                    <div className="ml-1 -mr-8 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
+                                                    <div className="ml-1 -mr-9 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
                                                         <Image
                                                             width="30"
                                                             height="30"
@@ -147,7 +147,7 @@ function VoteResult() {
                                             {
                                                 locationUrl[key] &&
                                                 locationUrl[key].map((url) => (
-                                                    <div className="ml-1 -mr-8 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
+                                                    <div className="ml-1 -mr-9 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
                                                         <Image
                                                             width="30"
                                                             height="30"
@@ -176,7 +176,7 @@ function VoteResult() {
                                             {
                                                 venueUrl[key] &&
                                                 venueUrl[key].map((url) => (
-                                                    <div className="ml-1 -mr-8 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
+                                                    <div className="ml-1 -mr-9 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
                                                         <Image
                                                             width="30"
                                                             height="30"
