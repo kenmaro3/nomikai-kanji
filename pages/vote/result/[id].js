@@ -92,7 +92,7 @@ function VoteResult() {
                                                             width="30"
                                                             height="30"
                                                             src={url}
-                                                            className="rounded-full"
+                                                            className="rounded-full -mr-2"
                                                             alt=""
                                                         />
                                                     </div>
@@ -123,7 +123,7 @@ function VoteResult() {
                                                             width="30"
                                                             height="30"
                                                             src={url}
-                                                            className="rounded-full"
+                                                            className="rounded-full -mr-2"
                                                             alt=""
                                                         />
                                                     </div>
@@ -152,7 +152,7 @@ function VoteResult() {
                                                             width="30"
                                                             height="30"
                                                             src={url}
-                                                            className="rounded-full"
+                                                            className="rounded-full -mr-2"
                                                             alt=""
                                                         />
                                                     </div>
@@ -181,7 +181,7 @@ function VoteResult() {
                                                             width="30"
                                                             height="30"
                                                             src={url}
-                                                            className="rounded-full"
+                                                            className="rounded-full -mr-2"
                                                             alt=""
                                                         />
                                                     </div>
