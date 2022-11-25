@@ -24,6 +24,7 @@ export default function Home(props) {
 
   const [name, setName] = useState()
   const [pictureUrl, setPictureUrl] = useState()
+  const [userId, setUserId] = useState()
 
   const nomi = useSelector((state) => state.nomi)
   const user = useSelector((state) => state.user)
@@ -42,6 +43,7 @@ export default function Home(props) {
           .then((profile) => {
             setName(profile.displayName)
             setPictureUrl(profile.pictureUrl)
+            setUserId(profile.userId)
             dispatch(userSlice.actions.setName(profile.displayName));
             dispatch(userSlice.actions.setUrl(profile.pictureUrl));
             dispatch(userSlice.actions.setId(profile.userId));
@@ -61,20 +63,29 @@ export default function Home(props) {
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get(`/api/plans/user/${user.id}`)
-      const res_data = await res.data
-      if (res_data !== undefined) {
-        setPlans(res_data.datas)
+      if (userId !== undefined) {
+        const res = await axios.get(`/api/plans/user/${userId}`)
+        const res_data = await res.data
+        if (res_data !== undefined) {
+          setPlans(res_data.datas)
+        }
+
       }
 
     })()
 
-  }, [])
+  }, [userId])
 
   const createNomikai = (e) => {
     e.preventDefault();
     dispatch(nomiSlice.actions.reset())
-    dispatch(nomiSlice.actions.setHostId(user.id))
+    if(userId === undefined){
+      dispatch(nomiSlice.actions.setHostId(user.id))
+    }
+    else{
+      dispatch(nomiSlice.actions.setHostId(userId))
+
+    }
     router.push("/nomi/name");
   };
 
