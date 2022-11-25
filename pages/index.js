@@ -98,9 +98,10 @@ export default function Home(props) {
           />
           <div className="text-slate-700 text-md ml-2">{name}</div>
         </div>
+        <div className="my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
         <button
           onClick={(e) => createNomikai(e)}
-          className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
+          className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-2"
         >
           新規 ノミカイ 作成🍻
         </button>

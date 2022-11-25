@@ -98,11 +98,11 @@ function Confirm() {
             [
               {
                 type: "text",
-                text: `ノミカイ・カンジ からのご連絡です🍺\n飲み会の開催を計画しています。`,
+                text: `ノミカイカンジでノミタイカンジ。\nカンジからのご連絡です🍺\n飲み会の開催を計画しています。`,
               },
               {
                 type: "text",
-                text: `こちらからリンクにアクセスして投票してください。 \n${shareUrl} \nアクセスの際にはパスコードを入力してください。`,
+                text: `こちらからリンクにアクセスして投票してください。 \n${shareUrl} \nアクセスの際には次のメッセージに記載のパスコードを入力してください。`,
               },
               {
                 type: "text",
@@ -152,54 +152,52 @@ function Confirm() {
 
 
   return (
-    <div className="flex flex-col h-screen justify-center items-center">
+    <div>
       {!modal ?
-        <div>
+        <div className="flex flex-col h-screen justify-center items-center">
           <label className="block">
             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
               Confirmation
             </span>
-            <div className="flex flex-row">
-              <div className="mx-2 flex flex-col">
-                <div className="mt-1 text-md font-medium text-slate-800">飲み会名: <span className="text-md text-slate-600">{nomi.name}</span></div>
-                <div className="mt-1 text-md font-medium text-slate-800">日時:
-                  <span className="text-md text-slate-600">{nomi.date?.map((el) => (<div>{ts_to_date(el)}</div>))}</span>
-                </div>
-                <div className="mt-1 text-md font-medium text-slate-800">場所:
-                  <span className="text-md text-slate-600">{nomi.location?.map((el) => (<div>{el}</div>))}</span>
-                </div>
+            <div className="mx-2 flex flex-col">
+              <div className="mt-1 text-sm font-medium text-slate-800">飲み会名: <span className="text-md text-slate-600">{nomi.name}</span></div>
+              <div className="mt-1 text-sm font-medium text-slate-800">日時:
+                <span className="text-sm text-slate-600">{nomi.date?.map((el) => (<div>{ts_to_date(el)}</div>))}</span>
+              </div>
+              <div className="mt-1 text-sm font-medium text-slate-800">場所:
+                <span className="text-sm text-slate-600">{nomi.location?.map((el) => (<div>{el}</div>))}</span>
+              </div>
+              <div className="mt-1 text-sm font-medium text-slate-800">お店候補:
+                {
+                  nomi.venue.map((placeElement) => (
+                    <div>
+                      <div>
+                        <a href={placeElement[0]} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[0]}</a>
+                      </div>
 
+                      <div>
+                        <a href={placeElement[1]} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[1]}</a>
+                      </div>
+
+                      <div>
+                        <a href={placeElement[2]} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[2]}</a>
+                      </div>
+                    </div>
+                  ))
+                }
               </div>
 
-              <div className="mr-2 ml-4 flex flex-col">
-                <div className="mt-1 text-md font-medium text-slate-800">お店候補:
-                  {
-                    nomi.venue.map((placeElement) => (
-                      <div>
-                        <div>
-                          <a href={placeElement[0]} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{placeElement[0]}</a>
-                        </div>
-
-                        <div>
-                          <a href={placeElement[1]} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{placeElement[1]}</a>
-                        </div>
-
-                        <div>
-                          <a href={placeElement[2]} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{placeElement[2]}</a>
-                        </div>
-                      </div>
-                    ))
-                  }
-                </div>
-
-                <div className="mt-1 text-md font-medium text-slate-800">回答締め切り:
-                  {/* {nomi.deadline?.map((el) => (<div>{ts_to_date(el)}</div>))} */}
-                  <div className="text-md text-slate-600">{ts_to_date(nomi.deadline)}</div>
-                </div>
-                {/* <div>passcode: {nomi.passcode}</div> */}
+              <div className="mt-1 text-sm font-medium text-slate-800">回答締め切り:
+                {/* {nomi.deadline?.map((el) => (<div>{ts_to_date(el)}</div>))} */}
+                <div className="text-sm text-slate-600">{ts_to_date(nomi.deadline)}</div>
               </div>
 
             </div>
+
+            <div className="mr-2 ml-4 flex flex-col">
+              {/* <div>passcode: {nomi.passcode}</div> */}
+            </div>
+
           </label>
 
           <div className="text-center">
@@ -222,33 +220,31 @@ function Confirm() {
 
         </div>
         :
-        <div className="relative w-full max-w-md h-full md:h-auto">
-          <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            {/* <button onClick={(e) => closeModal(e)} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="authentication-modal">
+        <div className="flex flex-col h-screen justify-center items-center">
+          {/* <button onClick={(e) => closeModal(e)} type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-toggle="authentication-modal">
               <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
               <span className="sr-only">Close modal</span>
             </button> */}
-            <div className="py-6 px-6 lg:px-8">
-              <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white"></h3>
-              <div>
-                <div className="text-lg text-slate-800">共有リンク</div>
-                <div>{shareUrl}</div>
-              </div>
+          <div className="py-6 px-6 lg:px-8">
+            <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white"></h3>
+            <div>
+              <div className="text-lg text-slate-800">共有リンク</div>
+              <div>{shareUrl}</div>
+            </div>
 
-              <div className="mt-2">
-                <div className="text-lg text-slate-800">パスコード</div>
-                <div>{passcode}</div>
-              </div>
+            <div className="mt-2">
+              <div className="text-lg text-slate-800">パスコード</div>
+              <div>{passcode}</div>
+            </div>
 
-              {/* <form className="space-y-6" action="#">
+            {/* <form className="space-y-6" action="#">
                 <div>
                   <label for="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter passcode</label>
                   <input value={passcode} onChange={handlePasscodeChange} type="text" name="passcode" id="passcode" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                 </div>
                 <button onClick={(e) => goBackToPlan(e)} type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go Back</button>
               </form> */}
-              <button onClick={(e) => goBackToPlan(e)} type="submit" className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ラインで共有</button>
-            </div>
+            <button onClick={(e) => goBackToPlan(e)} type="submit" className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ラインで共有</button>
           </div>
         </div>
       }

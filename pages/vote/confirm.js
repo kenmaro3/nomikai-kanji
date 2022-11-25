@@ -76,67 +76,63 @@ function VoteConfirm() {
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
           Confirmation
         </span>
-        <div className="flex flex-row">
-          <div className="mx-2 flex flex-col">
-            <div className="mt-1 text-md font-medium text-slate-800">飲み会名: <div className="text-md text-slate-600">{plan.name}</div></div>
-            <div className="mt-1 text-md font-medium text-slate-800">日時 Vote:
-              {
-                vote.date &&
-                <span className="text-md text-slate-600">{Object.keys(vote.date).map((el) => (<div className={vote.date[el] ? `` : `line-through`}>{ts_to_date(Number(el))}</div>))}</span>
-              }
-            </div>
-
+        <div className="mx-2 flex flex-col">
+          <div className="mt-1 text-sm font-medium text-slate-800">飲み会名: <div className="text-sm text-slate-600">{plan.name}</div></div>
+          <div className="mt-1 text-sm font-medium text-slate-800">日時 Vote:
+            {
+              vote.date &&
+              <span className="text-sm text-slate-600">{Object.keys(vote.date).map((el) => (<div className={vote.date[el] ? `` : `line-through`}>{ts_to_date(Number(el))}</div>))}</span>
+            }
           </div>
-
-          <div className="mr-2 ml-4 flex flex-col">
-            <div className="mt-1 text-md font-medium text-slate-800">場所 Vote:
-              {
-                vote.location &&
-                <span className="text-md text-slate-600"></span>
-              }
-              <span className="text-md text-slate-600">
-                {
-                  (() => {
-                    if (vote.location) {
-                      return Object.keys(vote.location).map((el, i) => {
-                        if (el !== "null") {
-                          return (
-                            <div className={vote.location[el] ? `` : `line-through`}>{el}</div>
-                          )
-                        }
-                      }
-                      )
-
-                    }
-
-                  })()
-                }
-              </span>
-            </div>
-
-            <div className="mt-1 text-md font-medium text-slate-800">お店 Vote:
+          <div className="mt-1 text-sm font-medium text-slate-800">場所 Vote:
+            {
+              vote.location &&
+              <span className="text-sm text-slate-600"></span>
+            }
+            <span className="text-sm text-slate-600">
               {
                 (() => {
-                  if (vote.venue) {
-                    return Object.keys(vote.venue).map((location) => {
-                      return Object.keys(vote.venue[location]).map((link) => {
-
-                        if (vote.venue[location][link]) {
-                          return (
-                            <div>
-                              <a href={link} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{link}</a>
-                            </div>
-                          )
-                        }
-                      })
-                    })
+                  if (vote.location) {
+                    return Object.keys(vote.location).map((el, i) => {
+                      if (el !== "null") {
+                        return (
+                          <div className={vote.location[el] ? `` : `line-through`}>{el}</div>
+                        )
+                      }
+                    }
+                    )
 
                   }
+
                 })()
               }
-            </div>
+            </span>
           </div>
+
+          <div className="mt-1 text-sm font-medium text-slate-800">お店 Vote:
+            {
+              (() => {
+                if (vote.venue) {
+                  return Object.keys(vote.venue).map((location) => {
+                    return Object.keys(vote.venue[location]).map((link) => {
+
+                      if (vote.venue[location][link]) {
+                        return (
+                          <div>
+                            <a href={link} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{link}</a>
+                          </div>
+                        )
+                      }
+                    })
+                  })
+
+                }
+              })()
+            }
+          </div>
+
         </div>
+
       </label >
 
       <div className="mt-5">

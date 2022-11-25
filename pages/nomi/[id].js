@@ -22,21 +22,35 @@ function NomiElement() {
     const [passcode, setPasscode] = useState()
     const [error, setError] = useState(false)
 
+    const [isClickable, setIsClickable] = useState(false)
+
     const [type, setType] = useState("vote")
 
     const router = useRouter()
     const { id } = router.query
 
     const goToPasscode = e => {
+        if (!isClickable) {
+            getPlan()
+            return
+        }
         setType("vote")
         setModal(true)
     }
     const goToPasscodeForResult = e => {
+        if (!isClickable) {
+            getPlan()
+            return
+        }
         setType("result")
         setModal(true)
     }
 
     const goToPasscodeForDelete = e => {
+        if (!isClickable) {
+            getPlan()
+            return
+        }
         setType("delete")
         setModal(true)
     }
@@ -65,6 +79,7 @@ function NomiElement() {
                 dispatch(voteSlice.actions.setPlanId(id))
                 dispatch(voteSlice.actions.setVoterId(user.id))
                 router.push(`/vote/${id}`)
+                setIsClickable(true)
                 setError(false)
             }
             else {
@@ -123,23 +138,26 @@ function NomiElement() {
         }
     }
 
-    useEffect(() => {
-
+    const getPlan = async () => {
         if (id !== undefined) {
-            (async () => {
-                const res = await axios.get(`/api/plans/${id}`)
-                if (res.data.datas !== undefined) {
-                    let tmp = { ...res.data.datas }
-                    tmp["host_id"] = id
+            const res = await axios.get(`/api/plans/${id}`)
+            if (res.data.datas !== undefined) {
+                let tmp = { ...res.data.datas }
+                tmp["host_id"] = id
 
-                    dispatch(planSlice.actions.set(tmp))
-                }
-                else {
-                    router.push("/")
+                dispatch(planSlice.actions.set(tmp))
+            }
+            else {
+                router.push("/")
 
-                }
-            })()
+            }
+
         }
+
+    }
+
+    useEffect(() => {
+        getPlan()
     }, [])
 
     return (
