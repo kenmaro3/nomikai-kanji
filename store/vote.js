@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     voter_id: null,
+    voter_url: null,
     plan_id: null,
     location: null,
     venue: null,
@@ -16,6 +17,9 @@ export const voteSlice = createSlice({
     reducers: {
         setVoterId(state, action) {
             state.voter_id = action.payload
+        },
+        setVoterUrl(state, action) {
+            state.voter_url = action.payload
         },
         setPlanId(state, action) {
             state.plan_id = action.payload

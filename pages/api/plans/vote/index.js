@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
     }
     else {
-        const { voter_id, plan_id, location, venue, date, time } = req.body
+        const { voter_id, voter_url, plan_id, location, venue, date, time } = req.body
 
         // first delete vote if already exists
         const votes_collection = collection(db, "votes");
@@ -44,6 +44,7 @@ export default async function handler(req, res) {
         try {
             const docRef = await addDoc(collection(db, "votes"), {
                 voter_id,
+                voter_url,
                 plan_id,
                 location,
                 venue,

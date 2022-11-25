@@ -12,6 +12,8 @@ import { nomiSlice } from "../store/nomi";
 
 import Header from "../components/header";
 
+import Image from "next/image"
+
 export default function Home(props) {
   /** You can access to liff and liffError object through the props.
    *  const { liff, liffError } = props;
@@ -108,14 +110,16 @@ export default function Home(props) {
         <Header />
 
         <div className="my-2 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
-          <img
-            width="40"
-            height="40"
-            //src="https://avatars.dicebear.com/api/male/kenmaro.svg"
-            src={pictureUrl}
-            className="rounded-full"
-            alt=""
-          />
+          {
+            pictureUrl &&
+            <Image
+              width="40"
+              height="40"
+              src={pictureUrl}
+              className="rounded-full"
+              alt=""
+            />
+          }
           <div className="text-slate-700 text-md ml-2">{name}</div>
         </div>
         <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>

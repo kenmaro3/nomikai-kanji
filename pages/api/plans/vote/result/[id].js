@@ -54,35 +54,45 @@ export default async function handler(req, res) {
         // second count
 
         let date_res = {}
+        let date_res_url = {}
         let time_res = {}
+        let time_res_url = {}
         let location_res = {}
+        let location_res_url = {}
         let venue_res = {}
+        let venue_res_url = {}
 
 
         votes.forEach((vote) => {
             Object.keys(vote.date).forEach((date) => {
                 if (date_res[date] !== undefined) {
                     date_res[date] += 1
+                    date_res_url[date].push(vote.voter_url)
                 }
                 else {
                     date_res[date] = 1
+                    date_res_url[date] = [vote.voter_url]
                 }
             })
             Object.keys(vote.time).forEach((time) => {
                 if (time_res[time] !== undefined) {
                     time_res[time] += 1
+                    time_res_url[time].push(vote.voter_url)
                 }
                 else {
                     time_res[time] = 1
+                    time_res_url[time] = [vote.voter_url]
                 }
             })
 
             Object.keys(vote.location).forEach((location) => {
                 if (location_res[location] !== undefined) {
                     location_res[location] += 1
+                    location_res_url[location].push(vote.voter_url)
                 }
                 else {
                     location_res[location] = 1
+                    location_res_url[location] = [vote.voter_url]
                 }
             })
 
@@ -90,9 +100,11 @@ export default async function handler(req, res) {
                 Object.keys(vote.venue[location]).forEach((venue) => {
                     if (venue_res[venue] != undefined) {
                         venue_res[venue] += 1
+                        venue_res_url[venue].push(vote.voter_url)
                     }
                     else {
                         venue_res[venue] = 1
+                        venue_res_url[venue] = [vote.voter_url]
                     }
 
                 })
@@ -103,7 +115,11 @@ export default async function handler(req, res) {
             date: date_res,
             time: time_res,
             location: location_res,
-            venue: venue_res
+            venue: venue_res,
+            date_url: date_res_url,
+            time_url: time_res_url,
+            location_url: location_res_url,
+            venue_url: venue_res_url,
         })
     }
     else {

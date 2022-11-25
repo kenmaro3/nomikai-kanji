@@ -58,6 +58,7 @@ function VoteConfirm() {
     sleep(1, async function () {
       const res = await axios.post("/api/plans/vote", {
         voter_id: vote.voter_id,
+        voter_url: vote.voter_url,
         plan_id: vote.plan_id,
         location: vote.location,
         venue: vote.venue,

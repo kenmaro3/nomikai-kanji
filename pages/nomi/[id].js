@@ -10,6 +10,7 @@ import { ts_to_date } from "../../lib/util"
 import { voteSlice } from '../../store/vote';
 
 import Header from '../../components/header';
+import Image from 'next/image'
 
 
 function NomiElement() {
@@ -139,6 +140,7 @@ function NomiElement() {
             if (data.res === "good") {
                 dispatch(voteSlice.actions.setPlanId(routerId))
                 dispatch(voteSlice.actions.setVoterId(user.id))
+                dispatch(voteSlice.actions.setVoterUrl(pictureUrl))
                 router.push(`/vote/${routerId}`)
                 setError(false)
             }
