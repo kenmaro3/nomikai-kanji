@@ -59,7 +59,7 @@ function Location() {
         <span className="mb-2 block text-lg font-medium text-slate-700">
           場所に投票
         </span>
-        <ul className="w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+        <ul className="w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
           {
             (() => {
               if (planToShow !== undefined) {
@@ -67,10 +67,10 @@ function Location() {
 
                   if (planToShow.location[el] !== null) {
                     return (
-                      <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
+                      <li className="w-full rounded-t-lg border-b border-gray-200 ">
                         <div className="flex items-center pl-3">
-                          <input onClick={(e) => handleSelected(e, planToShow.location[el])} id={`list-radio-${planToShow.location[el]}`} type="radio" value={locationS[i]} name={`list-radio-${i}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                          <label for="list-radio-license" className="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{planToShow.location[el]}</label>
+                          <input onClick={(e) => handleSelected(e, planToShow.location[el])} id={`list-radio-${planToShow.location[el]}`} type="radio" value={locationS[i]} name={`list-radio-${i}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500  focus:ring-2 " />
+                          <label for="list-radio-license" className="py-3 ml-2 w-full text-sm font-medium text-gray-900 ">{planToShow.location[el]}</label>
                         </div>
                       </li>
                     )

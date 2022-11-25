@@ -57,7 +57,7 @@ function NomiLocation() {
         </span>
         <label
           for="default"
-          className="mt-3 block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="mt-3 block mb-2 text-sm font-medium text-gray-900"
         >
           <span className="after:content-['*'] after:ml-0.5 after:text-red-500 ">
             第一候補🥇
@@ -67,7 +67,7 @@ function NomiLocation() {
           id="default"
           name={location1}
           onChange={(e) => selectHandler1(e)}
-          className="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
         >
           <option selected>None</option>
           {location_list.map((location) => {
@@ -86,7 +86,7 @@ function NomiLocation() {
 
         <label
           for="default"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          className="block mb-2 text-sm font-medium text-gray-900 "
         >
           第二候補🥈 (オプショナル)
         </label>
@@ -94,7 +94,7 @@ function NomiLocation() {
           id="default"
           name={location2}
           onChange={(e) => selectHandler2(e)}
-          className="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 mb-6 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
         >
           <option selected>None</option>
           {location_list.map((location) => {

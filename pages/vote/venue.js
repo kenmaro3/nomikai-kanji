@@ -79,17 +79,17 @@ function VoteVenue() {
                 return (
                   <>
                     <div className='text-slate-700 text-md font-medium'>{location}</div>
-                    <ul className="w-48 mt-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <ul className="w-48 mt-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 ">
 
                       {
                         (() => {
                           return Object.keys(planToShow.venue[location]).map((venueIndex) => {
                             if (planToShow.venue[location][venueIndex] !== "") {
                               return (
-                                <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
+                                <li className="w-full rounded-t-lg border-b border-gray-200 ">
                                   <div className="flex items-center pl-3">
-                                    <input onClick={(e) => handleSelected(e, location, planToShow.venue[location][venueIndex], venueIndex)} id={`list-radio-${location}-${venueIndex}`} type="radio" value={planToShow.venue[location][venueIndex]} name={`list-radio-${location}-${venueIndex}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                    <a href={planToShow.venue[location][venueIndex]} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{planToShow.venue[location][venueIndex]}</a>
+                                    <input onClick={(e) => handleSelected(e, location, planToShow.venue[location][venueIndex], venueIndex)} id={`list-radio-${location}-${venueIndex}`} type="radio" value={planToShow.venue[location][venueIndex]} name={`list-radio-${location}-${venueIndex}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 " />
+                                    <a href={planToShow.venue[location][venueIndex]} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 ">{planToShow.venue[location][venueIndex]}</a>
                                   </div>
                                 </li>
                               )
