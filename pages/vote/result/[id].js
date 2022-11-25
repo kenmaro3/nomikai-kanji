@@ -57,7 +57,7 @@ function VoteResult() {
                     <div className='py-2'>
                         {
                             Object.keys(date).map((key) => (
-                                <div className='text-slate-700 text-md my-1'>{ts_to_date(Number(key))} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{date[key]}</span></div>
+                                <div className='text-slate-700 text-sm my-1'>{ts_to_date(Number(key))} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{date[key]}</span></div>
                             ))
                         }
                     </div>
@@ -65,7 +65,7 @@ function VoteResult() {
                     <div className='py-2'>
                         {
                             Object.keys(location).map((key) => (
-                                <div className='text-slate-700 text-md my-1'>{key} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{location[key]}</span></div>
+                                <div className='text-slate-700 text-sm my-1'>{key} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{location[key]}</span></div>
                             ))
                         }
                     </div>
@@ -73,7 +73,7 @@ function VoteResult() {
                     <div className='py-2'>
                         {
                             Object.keys(venue).map((key) => (
-                                <div className='text-slate-700 text-md my-1'>{key} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</span></div>
+                                <div className='text-slate-700 text-sm my-1'>{key} <a href={venue[key]} target="_blank" rel="noopener noreferrer" className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</a></div>
                             ))
                         }
 

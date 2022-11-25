@@ -15,6 +15,7 @@ function VoteVenue() {
   const dispatch = useDispatch();
   //const [radioInput, setRadioInput] = useState([[false, false, false], [false, false, false]])
   const [radioInput, setRadioInput] = useState({})
+  const [planToShow, setPlanToShow] = useState()
 
   useEffect(() => {
     let tmp = {}
@@ -28,8 +29,14 @@ function VoteVenue() {
     })
     setRadioInput(tmp)
     dispatch(voteSlice.actions.setVenue(tmp))
+    setPlanToShow(plan)
 
   }, [])
+
+  useEffect(() => {
+    setPlanToShow(plan)
+
+  }, [plan])
 
 
   const handleSelected = (e, location, venue, venueIndex) => {
@@ -65,7 +72,7 @@ function VoteVenue() {
 
         {(() => {
           if (vote.location) {
-            return Object.keys(plan.venue).map((location) => {
+            return Object.keys(pplanToShowlan.venue).map((location) => {
               if (vote.location[location]) {
                 return (
                   <>
@@ -74,13 +81,13 @@ function VoteVenue() {
 
                       {
                         (() => {
-                          return Object.keys(plan.venue[location]).map((venueIndex) => {
-                            if (plan.venue[location][venueIndex] !== "") {
+                          return Object.keys(planToShow.venue[location]).map((venueIndex) => {
+                            if (planToShow.venue[location][venueIndex] !== "") {
                               return (
                                 <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
                                   <div className="flex items-center pl-3">
-                                    <input onClick={(e) => handleSelected(e, location, plan.venue[location][venueIndex], venueIndex)} id={`list-radio-${location}-${venueIndex}`} type="radio" value={plan.venue[location][venueIndex]} name={`list-radio-${location}-${venueIndex}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                                    <a href={plan.venue[location][venueIndex]} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{plan.venue[location][venueIndex]}</a>
+                                    <input onClick={(e) => handleSelected(e, location, planToShow.venue[location][venueIndex], venueIndex)} id={`list-radio-${location}-${venueIndex}`} type="radio" value={planToShow.venue[location][venueIndex]} name={`list-radio-${location}-${venueIndex}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                                    <a href={planToShow.venue[location][venueIndex]} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{planToShow.venue[location][venueIndex]}</a>
                                   </div>
                                 </li>
                               )

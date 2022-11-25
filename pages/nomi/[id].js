@@ -22,6 +22,8 @@ function NomiElement() {
     const [passcode, setPasscode] = useState()
     const [error, setError] = useState(false)
 
+    const [planToShow, setPlanToShow] = useState()
+
     const [type, setType] = useState("vote")
 
     const router = useRouter()
@@ -129,6 +131,7 @@ function NomiElement() {
             if (res.data.datas !== undefined) {
                 let tmp = { ...res.data.datas }
                 tmp["host_id"] = id
+                setPlanToShow(tmp)
 
                 dispatch(planSlice.actions.set(tmp))
             }
@@ -197,10 +200,10 @@ function NomiElement() {
                     <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">
                             <h3 className="group-hover:text-white">📆 日時 📍 開催場所投票はコチラ</h3>
-                            <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{plan?.name}</h3>
+                            <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{planToShow?.name}</h3>
                         </div>
-                        <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {plan?.host_id}</p>
-                        <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(plan?.deadline)}</p>
+                        <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {planToShow?.host_id}</p>
+                        <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(planToShow?.deadline)}</p>
                     </a>
 
                     <a onClick={(e) => goToPasscodeForResult(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
