@@ -18,7 +18,6 @@ function NomiDate() {
   }, [nomi]);
 
   const handleOnChange = (date) => {
-    console.log("🚀 ~ file: create2.js ~ line 20 ~ handleOnChange ~ e", date)
     setDates(date)
     dispatch(nomiSlice.actions.setDate({ date: date }));
 
@@ -26,8 +25,6 @@ function NomiDate() {
 
   const goToStep3 = (e) => {
     e.preventDefault();
-    console.log("here====")
-    console.log(dates)
     if (dates === undefined) {
       return
     }
@@ -35,7 +32,6 @@ function NomiDate() {
       return
     }
     router.push("/nomi/location");
-    console.log("nomi", nomi);
   };
 
 
@@ -43,7 +39,7 @@ function NomiDate() {
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
-          Nomi Dates
+          📆 ノミカイ日時
         </span>
         <div className="mt-3 px-3 py-2">
           <DatePicker value={dates} onChange={(date) => handleOnChange(date)} multiple />

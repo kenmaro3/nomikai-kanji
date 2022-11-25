@@ -13,52 +13,39 @@ function VoteVenue() {
   const plan = useSelector((state) => state.plan);
   const vote = useSelector((state) => state.vote);
   const dispatch = useDispatch();
-  const [radioInput, setRadioInput] = useState([[false, false, false], [false, false, false]])
-  const [links, setLinks] = useState([])
+  //const [radioInput, setRadioInput] = useState([[false, false, false], [false, false, false]])
+  const [radioInput, setRadioInput] = useState({})
+
+  useEffect(() => {
+    let tmp = {}
+    Object.keys(plan.venue).forEach((location) => {
+      let tmp2 = {}
+      Object.keys(plan.venue[location]).forEach((linkIndex) => {
+        //tmp2[plan.venue[location][linkIndex]] = false
+        tmp2[plan.venue[location][linkIndex]] = false
+      })
+      tmp[location] = tmp2
+    })
+    setRadioInput(tmp)
+    dispatch(voteSlice.actions.setVenue(tmp))
+
+  }, [])
 
 
-  const handleSelected = (e, locationIndex, venueIndex) => {
-    console.log("here")
-    console.log(e.target.value, locationIndex, venueIndex)
+  const handleSelected = (e, location, venue, venueIndex) => {
+    let tmp = { ...radioInput }
+    let tmp2 = { ...tmp[location] }
+    tmp2[venue] = !tmp2[venue]
+    tmp[location] = tmp2
+    //tmp[location][venue] = !tmp[location][venue]
 
-    let tmpBoolean = [...radioInput]
-    tmpBoolean[locationIndex][venueIndex] = !tmpBoolean[locationIndex][venueIndex]
-    setRadioInput(tmpBoolean)
-    console.log("🚀 ~ file: venue.js ~ line 26 ~ handleSelected ~ tmpBoolean", tmpBoolean)
-    const el = document.getElementById(`list-radio-${locationIndex}-${venueIndex}`);
-    el.checked = tmpBoolean[locationIndex][venueIndex]
+    setRadioInput(tmp)
+    dispatch(voteSlice.actions.setVenue(tmp))
 
-    if (tmpBoolean[locationIndex][venueIndex]) {
-      let tmp = [...links, e.target.value]
-      setLinks(tmp.filter(distinct))
-      dispatch(voteSlice.actions.setVenue(tmp.filter(distinct)))
-    }
-    else{
-      let index = links.indexOf(e.target.value)
-      let tmp = [...links]
-      tmp.splice(index, 1)
-      setLinks(tmp)
-      dispatch(voteSlice.actions.setVenue(tmp))
-    }
-
-
-
-
+    const el = document.getElementById(`list-radio-${location}-${venueIndex}`);
+    el.checked = tmp2[venue]
 
   }
-
-  // useEffect(() => {
-  //   setLinks([])
-  //   vote.location?.forEach((el) => {
-  //     plan.venue[el].forEach((venueEl) => {
-  //       console.log("el", venueEl)
-  //       setLinks([...links, venueEl])
-  //     })
-
-  //   })
-  //   console.log("links", links)
-
-  // }, [vote])
 
 
   const goToNext = (e) => {
@@ -74,41 +61,46 @@ function VoteVenue() {
           お店に投票
         </span>
 
-        {vote.location &&
-          <div className='text-slate-700 text-md font-medium'>{vote.location[0]}</div>
-        }
-        <ul className="w-48 mt-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
 
-          {vote.location &&
-            plan.venue[vote.location[0]].map((el, i) => (
-              <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
-                <div className="flex items-center pl-3">
-                  <input onClick={(e) => handleSelected(e, 0, i)} id={`list-radio-${0}-${i}`} type="radio" value={el} name={`list-radio-${i}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                  <a href={el} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{el}</a>
-                </div>
-              </li>
 
-            ))
+        {(() => {
+          if (vote.location) {
+            return Object.keys(plan.venue).map((location) => {
+              if (vote.location[location]) {
+                return (
+                  <>
+                    <div className='text-slate-700 text-md font-medium'>{location}</div>
+                    <ul className="w-48 mt-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+
+                      {
+                        (() => {
+                          return Object.keys(plan.venue[location]).map((venueIndex) => {
+                            if (plan.venue[location][venueIndex] !== "") {
+                              return (
+                                <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
+                                  <div className="flex items-center pl-3">
+                                    <input onClick={(e) => handleSelected(e, location, plan.venue[location][venueIndex], venueIndex)} id={`list-radio-${location}-${venueIndex}`} type="radio" value={plan.venue[location][venueIndex]} name={`list-radio-${location}-${venueIndex}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                                    <a href={plan.venue[location][venueIndex]} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{plan.venue[location][venueIndex]}</a>
+                                  </div>
+                                </li>
+                              )
+
+                            }
+
+                          })
+
+                        })()
+                      }
+
+                    </ul>
+                  </>
+
+
+                )
+              }
+            })
           }
-        </ul>
-
-        {vote.location &&
-          <div className='text-slate-700 text-md font-medium mt-4'>{vote.location[1] ? vote.location[1] : ""}</div>
-        }
-        <ul className="w-48 mt-2 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-          {vote.location &&
-            plan.venue[vote.location[1]]?.map((el, i) => (
-              <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
-                <div className="flex items-center pl-3">
-                  <input onClick={(e) => handleSelected(e, 1, i)} id={`list-radio-${1}-${i}`} type="radio" value={el} name={`list-radio-${i}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                  <a href={el} for="list-radio-license" target="_blank" rel="noopener noreferrer" className="overflow-hidden py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{el}</a>
-                </div>
-              </li>
-
-            ))
-
-          }
-        </ul>
+        })()}
 
       </label>
 

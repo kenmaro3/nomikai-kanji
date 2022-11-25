@@ -16,7 +16,6 @@ function NomiVenue() {
   const [url, setUrl] = useState("")
 
   useEffect(() => {
-    console.log("called!!")
     setName(nomi.name)
 
     nomi.venue.forEach((placeElement, i) => {
@@ -38,20 +37,9 @@ function NomiVenue() {
       venueIndex: venueIndex,
       value: e.target.value
     }))
-    // //tmp[el][index] = e.target.value
-    // console.log("here======!!!")
-    // console.log(tmp)
-    // if (tmp[el][index]) {
-    //   console.log("tmp22222")
-    //   console.log(tmp[el][index])
-    //   tmp[el][index] = e.target.value
-    //   dispatch(nomiSlice.actions.setVenue(tmp))
-    // }
   }
 
   const goNext = (e) => {
-    console.log("heredude")
-    console.log(placeVenue)
     let flag = false
     for (let i = 0; i < 2; i++) {
       for (let j = 0; j < 3; j++) {
@@ -71,9 +59,9 @@ function NomiVenue() {
   return (
     <div className="flex flex-col h-screen justify-center items-center">
       <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
-        お店候補の入力
+        🥘 お店候補の入力
       </span>
-      <span className="text-xs font-medium text-slate-500">
+      <span className="mb-2 text-xs font-medium text-slate-500">
         各場所３つまで
       </span>
 
@@ -88,7 +76,7 @@ function NomiVenue() {
               <input
                 type="text"
                 className="mb-2 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                placeholder="restaurant url..."
+                placeholder="URLの入力..."
                 //value={nomi.venue[el][0]}
                 value={placeVenue[i][0]}
                 onChange={(e) => handleVenue(e, i, 0)}
@@ -96,7 +84,7 @@ function NomiVenue() {
               <input
                 type="text"
                 className="mb-2 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                placeholder="restaurant url..."
+                placeholder="URLの入力..."
                 //value={nomi.venue[el][0]}
                 value={placeVenue[i][1]}
                 onChange={(e) => handleVenue(e, i, 1)}
@@ -104,7 +92,7 @@ function NomiVenue() {
               <input
                 type="text"
                 className="mb-2 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
-                placeholder="restaurant url..."
+                placeholder="URLの入力..."
                 //value={nomi.venue[el][0]}
                 value={placeVenue[i][2]}
                 onChange={(e) => handleVenue(e, i, 2)}

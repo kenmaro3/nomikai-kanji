@@ -1,41 +1,57 @@
-import { datas, generateUuid } from "../db"
+import { datas, votes } from "../db"
+import { db } from "../../../lib/firebase"
+import { addDoc, collection, getDocs, getDoc } from "firebase/firestore";
+import { doc } from "firebase/firestore";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const method = req.method;
   const { id } = req.query
 
-  if(method == "GET"){
-    console.log("datas")
-    console.log(datas)
-    const data_f = datas.filter((data) => data.id == id)
-    res.status(200).json({ datas: data_f })
+  if (method == "GET") {
+
+    const docRef = doc(db, "datas", id);
+    // Get a document, forcing the SDK to fetch from the offline cache.
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        res.status(200).json({ datas: docSnap.data() })
+      } else {
+        // doc.data() will be undefined in this case
+        res.status(404).json({ info: "document not found" })
+      }
+    } catch (e) {
+      res.status(500).json({ info: "something went wrong" })
+    }
+
+
+
 
   }
-  else{
-      const { passcode } = req.body
+  else if (method == "POST") {
+    const { passcode } = req.body
 
-      console.log("\n\nhere!!!!")
-      console.log("🚀 ~ file: [id].js ~ line 19 ~ handler ~ datas", datas)
-      const data_f = datas.filter((data) => {
-        return data.id == id
-      })
-      console.log("\n\n======hereeee")
-      console.log(passcode)
-      console.log(data_f[0])
-      if (data_f === undefined) {
-        res.status(404).json({ res: "plan not found" })
+    const docRef = doc(db, "datas", id);
 
-      }
-      else {
-        if (passcode === data_f[0].passcode) {
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data()
+        if (data.passcode == passcode) {
           res.status(200).json({ res: "good" })
         }
         else {
           res.status(200).json({ res: "bad" })
         }
-
+      } else {
+        // doc.data() will be undefined in this case
+        res.status(404).json({ info: "document not found" })
       }
+    } catch (e) {
+      res.status(500).json({ info: "something went wrong" })
+    }
 
   }
+
+
 
 }

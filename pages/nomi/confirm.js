@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { nomiSlice } from "../../store/nomi";
 import { useRouter } from 'next/router'
 import axios from "axios";
+import { useReward } from 'react-rewards';
 
 import { ts_to_date } from "../../lib/util"
 
@@ -21,12 +22,32 @@ function Confirm() {
   const [passcode, setPasscode] = useState()
   const [shareUrl, setShareUrl] = useState()
 
-  const handleOnChange = (date) => {
 
-    console.log("🚀 ~ file: create2.js ~ line 20 ~ handleOnChange ~ e", date)
-    setDeadline(date)
+  const { reward, isAnimating } = useReward('rewardId', 'confetti');
 
-  };
+  function sleep(waitSec, callbackFunc) {
+
+    // 経過時間（秒）
+    var spanedSec = 0;
+
+    // 1秒間隔で無名関数を実行
+    var id = setInterval(function () {
+
+      spanedSec++;
+
+      // 経過時間 >= 待機時間の場合、待機終了。
+      if (spanedSec >= waitSec) {
+
+        // タイマー停止
+        clearInterval(id);
+
+        // 完了時、コールバック関数を実行
+        if (callbackFunc) callbackFunc();
+      }
+    }, 1000);
+
+  }
+
 
   useEffect(() => {
     setShareUrl(`${process.env.NEXT_PUBLIC_URL}nomi/${id}`)
@@ -34,26 +55,30 @@ function Confirm() {
 
   const goToModify = (e) => {
     e.preventDefault();
-    router.push("/nomi/create1");
+    router.push("/nomi/name");
   };
 
   const goToOk = async (e) => {
+    reward()
     e.preventDefault();
+    sleep(1, async function () {
 
-    const res = await axios.post("/api/plans", {
-      name: nomi.name,
-      date: nomi.date,
-      location: nomi.location,
-      venue: nomi.venue,
-      deadline: nomi.deadline,
-      host_id: nomi.host_id,
-    })
-    console.log("🚀 ~ file: confirm.js ~ line 31 ~ goToOk ~ res", res)
+      const res = await axios.post("/api/plans", {
+        name: nomi.name,
+        date: nomi.date,
+        location: nomi.location,
+        venue: nomi.venue,
+        deadline: nomi.deadline,
+        host_id: nomi.host_id,
+      })
 
-    setId(res.data.id)
-    setPasscode(res.data.passcode)
+      setId(res.data.id)
+      setPasscode(res.data.passcode)
 
-    setModal(true)
+      setModal(true)
+
+    });
+
 
     //Router.push("/nomi/create5");
   };
@@ -67,15 +92,21 @@ function Confirm() {
 
   const sendMessageViaTargetPicker = () => {
     import("@line/liff").then((liff) => {
-      console.log("start liff.init()...");
       if (liff.ready) {
         if (liff.isApiAvailable("shareTargetPicker")) {
-          console.log("liff is ready for sending message")
           liff.shareTargetPicker(
             [
               {
                 type: "text",
-                text: `What's up guys🦧 Nomikai Kanji からのご連絡です!! \nInvitation link ${shareUrl} \nPasscode: ${passcode}`,
+                text: `ノミカイ・カンジ からのご連絡です🍺\n飲み会の開催を計画しています。`,
+              },
+              {
+                type: "text",
+                text: `こちらからリンクにアクセスして投票してください。 \n${shareUrl} \nアクセスの際にはパスコードを入力してください。`,
+              },
+              {
+                type: "text",
+                text: `${passcode}`,
               },
             ],
             {
@@ -85,13 +116,11 @@ function Confirm() {
             .then(function (res) {
               if (res) {
                 // succeeded in sending a message through TargetPicker
-                console.log(`[${res.status}] Message sent!`)
               } else {
                 const [majorVer, minorVer] = (liff.getLineVersion() || "").split('.');
                 if (parseInt(majorVer) == 10 && parseInt(minorVer) < 11) {
                   // LINE 10.3.0 - 10.10.0
                   // Old LINE will access here regardless of user's action
-                  console.log('TargetPicker was opened at least. Whether succeeded to send message is unclear')
                 } else {
                   // LINE 10.11.0 -
                   // sending message canceled
@@ -148,15 +177,15 @@ function Confirm() {
                     nomi.venue.map((placeElement) => (
                       <div>
                         <div>
-                          <a href={placeElement[0]} className="text-md text-slate-600">{placeElement[0]}</a>
+                          <a href={placeElement[0]} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{placeElement[0]}</a>
                         </div>
 
                         <div>
-                          <a href={placeElement[1]} className="text-md text-slate-600">{placeElement[1]}</a>
+                          <a href={placeElement[1]} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{placeElement[1]}</a>
                         </div>
 
                         <div>
-                          <a href={placeElement[2]} className="text-md text-slate-600">{placeElement[2]}</a>
+                          <a href={placeElement[2]} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{placeElement[2]}</a>
                         </div>
                       </div>
                     ))
@@ -182,11 +211,13 @@ function Confirm() {
             </button>
 
             <button
+              disabled={isAnimating}
               onClick={(e) => goToOk(e)}
               className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
             >
               OK
             </button>
+            <span id="rewardId" />
           </div>
 
         </div>
@@ -199,11 +230,16 @@ function Confirm() {
             </button> */}
             <div className="py-6 px-6 lg:px-8">
               <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white"></h3>
-              <div>share url</div>
-              <div>{shareUrl}</div>
+              <div>
+                <div className="text-lg text-slate-800">共有リンク</div>
+                <div>{shareUrl}</div>
+              </div>
 
-              <div>passcode</div>
-              <div>{passcode}</div>
+              <div className="mt-2">
+                <div className="text-lg text-slate-800">パスコード</div>
+                <div>{passcode}</div>
+              </div>
+
               {/* <form className="space-y-6" action="#">
                 <div>
                   <label for="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Enter passcode</label>
@@ -211,7 +247,7 @@ function Confirm() {
                 </div>
                 <button onClick={(e) => goBackToPlan(e)} type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go Back</button>
               </form> */}
-              <button onClick={(e) => goBackToPlan(e)} type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Go Back</button>
+              <button onClick={(e) => goBackToPlan(e)} type="submit" className="mt-4 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ラインで共有</button>
             </div>
           </div>
         </div>

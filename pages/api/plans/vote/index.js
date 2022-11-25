@@ -1,53 +1,59 @@
-import { datas, votes, generateUuid } from "../../db"
+import { generatePasscode } from "../../db"
+import { db } from "../../../../lib/firebase"
+import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, query, where, deleteDoc } from "firebase/firestore";
+import { arrayToObj, venueArrayToObj } from "../../../../lib/util";
 
-const query_vote = (voter_id, plan_id) => {
-    for (let i = 0; i < votes.length; i++) {
-        if (votes[i].voter_id === voter_id && votes[i].plan_id === plan_id) {
-            return i
-        }
 
-    }
-    return -1
-}
-
-export default function handler(req, res) {
+export default async function handler(req, res) {
     const method = req.method;
 
     if (method == "GET") {
-        res.status(200).json({ votes: votes })
+        const querySnapshot = await getDocs(collection(db, "votes"));
+        let res_list = []
+        querySnapshot.forEach((doc) => {
+            res_list.push({ id: doc.id, data: doc.data() })
+        });
+
+        res.status(200).json({ votes: res_list })
 
     }
     else {
-        const id = generateUuid()
         const { voter_id, plan_id, location, venue, date } = req.body
-        console.log("🚀 ~ file: index.js ~ line 24 ~ handler ~ req.body", req.body)
 
+        // first delete vote if already exists
+        const votes_collection = collection(db, "votes");
+        const q = query(votes_collection,
+            where("plan_id", "==", plan_id),
+            where("voter_id", "==", voter_id),
+        );
 
-        const query_res = query_vote(voter_id, plan_id)
-        if (query_res == -1) {
-            console.log("query_res if", query_res)
-        }
-        else {
-            console.log("query_res else", query_res)
-            votes.splice(query_res, 1)
-        }
-        votes.push({
-            id,
-            voter_id,
-            plan_id,
-            location,
-            venue,
-            date,
+        let vote_id_already_exists = []
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            vote_id_already_exists.push(doc.id)
+        });
 
+        vote_id_already_exists.forEach(async (delete_id) => {
+            await deleteDoc(doc(db, "votes", delete_id));
         })
 
-        console.log("🚀 ~ file: index.js ~ line 42 ~ handler ~ votes", votes)
 
-
-
-        res.status(200).json({ id: id })
-
-
+        // second add vote
+        try {
+            const docRef = await addDoc(collection(db, "votes"), {
+                voter_id,
+                plan_id,
+                location,
+                venue,
+                date,
+            });
+            res.status(200).json({ id: docRef.id })
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            res.status(500).json({ info: "something went wrong to add data for writing to firestore" })
+        }
     }
 
 

@@ -37,8 +37,6 @@ export const nomiSlice = createSlice({
       state.venue = action.payload
     },
     setVenueSpecific(state, action) {
-      console.log("here")
-      console.log(state.venue[0])
       state.venue[action.payload.placeIndex][action.payload.venueIndex] = action.payload.value
     },
     // addHistory(state, action) {

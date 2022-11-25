@@ -23,20 +23,6 @@ function NomiLocation() {
   const nomi = useSelector((state) => state.nomi);
   const dispatch = useDispatch();
 
-
-  // useEffect(() => {
-  //   if (nomi.location?.length == 1) {
-  //     setLocation1(nomi.location[0])
-  //   } else if (nomi.location?.length == 2) {
-  //     setLocation1(nomi.location[0])
-  //     setLocation2(nomi.location[1])
-  //   }
-  //   console.log("called!!!")
-  //   console.log("🚀 ~ file: create3.js ~ line 19 ~ CreateNomi3 ~ location1", location1)
-  //   console.log("🚀 ~ file: create3.js ~ line 19 ~ CreateNomi3 ~ location2", location2)
-
-  // }, [nomi]);
-
   useEffect(() => {
     setLocation1(nomi.location[0])
     setLocation2(nomi.location[1])
@@ -48,19 +34,7 @@ function NomiLocation() {
     if (location1 === undefined && location2 === undefined) {
       return
     }
-    // let tmp = []
-    // if (location1 !== null && location1 !== undefined) {
-    //   tmp.push(location1)
-    // }
-    // if (location2 !== null && location2 !== undefined) {
-    //   tmp.push(location2)
-    // }
-    // console.log("here")
-    // console.log(location1)
-    // console.log(location2)
-    // dispatch(nomiSlice.actions.setLocation({ location: tmp }))
     e.preventDefault();
-    //Router.push("/nomi/create4");
     router.push("/nomi/venue");
   };
 
@@ -79,7 +53,7 @@ function NomiLocation() {
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="block text-lg font-medium text-slate-700">
-          Nomi Locations
+          📍 ノミカイ場所
         </span>
         <label
           for="default"
@@ -114,7 +88,7 @@ function NomiLocation() {
           for="default"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          第二候補🥈
+          第二候補🥈 (オプショナル)
         </label>
         <select
           id="default"

@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { userSlice } from "../store/user";
 import { nomiSlice } from "../store/nomi";
 
+import Header from "../components/header";
+
 export default function Home(props) {
   /** You can access to liff and liffError object through the props.
    *  const { liff, liffError } = props;
@@ -34,13 +36,11 @@ export default function Home(props) {
   useEffect(() => {
     // to avoid `window is not defined` error
     import("@line/liff").then((liff) => {
-      console.log("start liff.init()...");
       if (liff.ready) {
         liff
           .getProfile()
           .then((profile) => {
             setName(profile.displayName)
-            console.log("🚀 ~ file: index.js ~ line 46 ~ .then ~ profile", profile)
             setPictureUrl(profile.pictureUrl)
             dispatch(userSlice.actions.setName(profile.displayName));
             dispatch(userSlice.actions.setUrl(profile.pictureUrl));
@@ -54,20 +54,22 @@ export default function Home(props) {
 
       }
 
+
     });
   }, []);
 
+
   useEffect(() => {
     (async () => {
-      const res = await axios.get("/api/plans")
+      const res = await axios.get(`/api/plans/user/${user.id}`)
       const res_data = await res.data
-      console.log("🚀 ~ file: index.js ~ line 58 ~ res", res_data)
       if (res_data !== undefined) {
         setPlans(res_data.datas)
       }
 
     })()
-  }, []);
+
+  }, [])
 
   const createNomikai = (e) => {
     e.preventDefault();
@@ -79,61 +81,52 @@ export default function Home(props) {
   return (
     <div>
       <Head>
-        <title>Nomikai Starter</title>
+        <title>ノミカイ・カンジ</title>
       </Head>
 
       <div className="flex flex-col h-screen items-center justify-center">
-        <h1 className="text-xl font-bold px-3 py-2 shadow-md mb-3">Nomikai Kanji</h1>
+        <Header />
 
-        <div className="my-2 p-2 flex items-center justify-center border border-zinc-300 rounded">
+        <div className="my-2 p-2 flex items-center justify-center border-slate border-zinc-300 rounded">
           <img
             width="40"
             height="40"
             //src="https://avatars.dicebear.com/api/male/kenmaro.svg"
             src={pictureUrl}
+            className="rounded-full"
             alt=""
           />
-          <div>{name}</div>
+          <div className="text-slate-700 text-md ml-2">{name}</div>
         </div>
         <button
           onClick={(e) => createNomikai(e)}
           className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
         >
-          新規 Nomikai 作成🍻
+          新規 ノミカイ 作成🍻
         </button>
 
-        <div className="p-2 flex flex-col items-center justify-center">
-          <div className="p-4 border border-black rounded">
-            {
-              plans?.map((el) => (
-                <Link href={`/nomi/${el.id}`}>
-                  <div>
-                    <div className="flex flex-col">
-                      <div>{el.id}</div>
-                      <h2>{el.name}</h2>
+        <div className="mt-4 p-2 flex flex-col items-center justify-center">
+          <div className="mb-2 font-bold">マイ・ノミカイ</div>
+          {
+            plans?.map((el) => (
+              <Link href={`/nomi/${el.id}`}>
+                <div className="mt-1 cursor-pointer shadow-md px-3 py-2 rounded-lg hover:bg-sky-400">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="flex flex-row">
+                      <span className="text-md text-slate-700">ノミカイネーム </span>
+
+                      <span className="text-md text-slate-700 ml-2">{el.data.name}</span>
                     </div>
-                    <div className="flex flex-row px-4 py-2">
-                      <img
-                        className="p-1 border rounded-full border-black"
-                        width="40"
-                        height="40"
-                        src="https://avatars.dicebear.com/api/male/kento.svg"
-                        alt=""
-                      />
-                      <img
-                        className="p-1 border rounded-full border-black"
-                        width="40"
-                        height="40"
-                        src="https://avatars.dicebear.com/api/male/takei.svg"
-                        alt=""
-                      />
+                    <div>
+                      <span className="text-xs text-slate-500">ID</span>
+                      <span className="text-xs text-slate-500 ml-2 overflow-hidden">{el.id} </span>
                     </div>
                   </div>
-                </Link>
+                </div>
+              </Link>
 
-              ))
-            }
-          </div>
+            ))
+          }
         </div>
       </div>
     </div>

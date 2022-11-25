@@ -19,7 +19,6 @@ function NomiDeadline() {
 
   const handleOnChange = (date) => {
 
-    console.log("🚀 ~ file: create2.js ~ line 20 ~ handleOnChange ~ e", date)
     setDeadline(date)
     dispatch(nomiSlice.actions.setDeadline({ deadline: date }));
 
@@ -39,7 +38,7 @@ function NomiDeadline() {
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
-          回答締め切り日
+          📆 回答締め切り日
         </span>
         <div className="mt-3 mb-3">
           <DatePicker value={deadline} onChange={(date) => handleOnChange(date)} />

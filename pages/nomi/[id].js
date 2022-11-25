@@ -7,11 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { planSlice } from "../../store/plan"
 
 import { ts_to_date } from "../../lib/util"
+import { voteSlice } from '../../store/vote';
+
+import Header from '../../components/header';
 
 
 function NomiElement() {
 
     const plan = useSelector((state) => state.plan);
+    const user = useSelector((state) => state.user)
     const dispatch = useDispatch();
 
     const [modal, setModal] = useState(false)
@@ -32,6 +36,11 @@ function NomiElement() {
         setModal(true)
     }
 
+    const goToPasscodeForDelete = e => {
+        setType("delete")
+        setModal(true)
+    }
+
     const closeModal = e => {
         setModal(false)
 
@@ -39,7 +48,6 @@ function NomiElement() {
 
     const handlePasscodeChange = (e) => {
         setPasscode(e.target.value)
-        console.log("passcode", passcode)
 
     }
 
@@ -49,12 +57,13 @@ function NomiElement() {
 
         if (passcode !== undefined) {
             const res = await axios.post(`/api/plans/${id}`, {
-                passcode: passcode
+                passcode: passcode,
             })
 
             const data = res.data
-            console.log("🚀 ~ file: [id].js ~ line 46 ~ matchPasscode ~ data", data)
             if (data.res === "good") {
+                dispatch(voteSlice.actions.setPlanId(id))
+                dispatch(voteSlice.actions.setVoterId(user.id))
                 router.push(`/vote/${id}`)
                 setError(false)
             }
@@ -73,11 +82,10 @@ function NomiElement() {
 
         if (passcode !== undefined) {
             const res = await axios.post(`/api/plans/${id}`, {
-                passcode: passcode
+                passcode: passcode,
             })
 
             const data = res.data
-            console.log("🚀 ~ file: [id].js ~ line 46 ~ matchPasscode ~ data", data)
             if (data.res === "good") {
                 router.push(`/vote/result/${id}`)
                 setError(false)
@@ -91,18 +99,40 @@ function NomiElement() {
         }
     }
 
-    useEffect(() => {
+    const matchPasscodeForDelete = async (e) => {
+        e.preventDefault()
+        setError(false)
 
-        console.log("🚀 ~ file: [id].js ~ line 14 ~ NomiElement ~ id", id)
-        console.log("🚀 ~ file: [id].js ~ line 14 ~ NomiElement ~ router.query", router.query)
+        if (passcode !== undefined) {
+            const res = await axios.post(`/api/plans/delete/${id}`, {
+                passcode: passcode,
+                user_id: user.id
+            })
+
+            const data = res.data
+            if (data.res === "good") {
+                router.push(`/`)
+                setError(false)
+            }
+            else {
+                setError(true)
+            }
+        }
+        else {
+            return
+        }
+    }
+
+    useEffect(() => {
 
         if (id !== undefined) {
             (async () => {
                 const res = await axios.get(`/api/plans/${id}`)
-                console.log("🚀 ~ file: [id].js ~ line 18 ~ res", res)
-                if (res.data.datas[0] !== undefined) {
+                if (res.data.datas !== undefined) {
+                    let tmp = { ...res.data.datas }
+                    tmp["host_id"] = id
 
-                    dispatch(planSlice.actions.set(res.data.datas[0]))
+                    dispatch(planSlice.actions.set(tmp))
                 }
                 else {
                     router.push("/")
@@ -113,7 +143,8 @@ function NomiElement() {
     }, [])
 
     return (
-        <div className="flex flex-row h-screen items-center justify-center">
+        <div className="flex flex-col h-screen items-center justify-center">
+            <Header />
             {modal ?
                 <div className="relative w-full max-w-md h-full md:h-auto">
                     <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -125,7 +156,7 @@ function NomiElement() {
                             <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">回答パスコードの入力</h3>
                             <form className="space-y-6" action="#">
                                 <div>
-                                    <label for="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kanji から送信されたパスコードを入力してください。</label>
+                                    <label for="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">カンジ から送信されたパスコードを入力してください。</label>
                                     <input value={passcode} onChange={handlePasscodeChange} type="text" name="passcode" id="passcode" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
                                 </div>
                                 {error &&
@@ -138,9 +169,15 @@ function NomiElement() {
                                                 <button onClick={(e) => matchPasscode(e)} type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">送信</button>
                                             )
                                         }
-                                        else {
+                                        else if (type == "result") {
                                             return (
                                                 <button onClick={(e) => matchPasscodeForResult(e)} type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">送信</button>
+                                            )
+
+                                        }
+                                        else if (type == "delete") {
+                                            return (
+                                                <button onClick={(e) => matchPasscodeForDelete(e)} type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">送信</button>
                                             )
 
                                         }
@@ -152,29 +189,27 @@ function NomiElement() {
                     </div>
                 </div>
                 :
-                <div className="flex flex-row h-screen items-center justify-center">
-                    <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs mx-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+                <div className="flex flex-col ">
+                    <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">
-                            {/* <svg className="h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"></svg> */}
                             <h3 className="group-hover:text-white">📆 日時 📍 開催場所投票はコチラ</h3>
                             <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{plan?.name}</h3>
                         </div>
-                        {/* <p className="text-slate-500 group-hover:text-white text-sm">{plan?.host}</p>
-                        <p className="text-slate-500 group-hover:text-white text-sm">{plan?.deadline}</p> */}
-                        <p className="text-slate-500 group-hover:text-white text-sm">Host: {plan?.host}</p>
+                        <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {plan?.host_id}</p>
                         <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(plan?.deadline)}</p>
                     </a>
 
-                    <a onClick={(e) => goToPasscodeForResult(e)} className="group block max-w-xs mx-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+                    <a onClick={(e) => goToPasscodeForResult(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">
-                            {/* <svg className="h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"></svg> */}
-                            <h3 className="group-hover:text-white">🐱投票結果</h3>
-                            <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{plan?.name}</h3>
+                            <h3 className="group-hover:text-white">🐱投票結果を見る</h3>
                         </div>
-                        {/* <p className="text-slate-500 group-hover:text-white text-sm">{plan?.host}</p>
-                        <p className="text-slate-500 group-hover:text-white text-sm">{plan?.deadline}</p> */}
-                        <p className="text-slate-500 group-hover:text-white text-sm">Host: {plan?.host}</p>
-                        <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(plan?.deadline)}</p>
+                    </a>
+
+                    <a onClick={(e) => goToPasscodeForDelete(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+                        <div className="flex flex-col items-center space-x-3">
+                            <h3 className="group-hover:text-white">🗑投稿を削除する</h3>
+                        </div>
+                        <p className="text-slate-500 group-hover:text-white text-sm text-center">カンジ のみ削除可能</p>
                     </a>
 
                 </div>

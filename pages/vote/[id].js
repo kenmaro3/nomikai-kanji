@@ -16,39 +16,24 @@ function Vote() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const [dateS, setDateS] = useState([]);
-
-  const initVote = () => {
-
-    let tmp = []
-    plan.date.forEach((el, i) => tmp.push(false))
-    setDateS(tmp)
-    console.log("🚀 ~ file: [id].js ~ line 23 ~ useEffect ~ dateS", dateS)
-    dispatch(voteSlice.actions.reset())
-    dispatch(voteSlice.actions.setPlanId(plan.id));
-    dispatch(voteSlice.actions.setVoterId(user.id));
-  }
+  const [radioInput, setRadioInput] = useState({})
 
   useEffect(() => {
-    console.log("useEffect [plan] called!!!")
-    initVote()
-  }, [plan])
+    let tmp = {}
+    Object.keys(plan.date).map((date) => {
+      tmp[date] = false
+    })
+    setRadioInput(tmp)
 
-  useEffect(() => {
-    console.log("useEffect [] called!!!")
-    initVote()
   }, [])
 
-  const handleSelected = (e, i) => {
-    console.log("selected", i)
-    //setDateS({ ...dateS, i: !currentSelection })
-    let tmp = [...dateS]
-    tmp[i] = !tmp[i]
-    setDateS(tmp)
+  const handleSelected = (e, date) => {
+    let tmp = { ...radioInput }
+    tmp[date] = !tmp[date]
+    setRadioInput(tmp)
     dispatch(voteSlice.actions.setDate(tmp));
-    const el = document.getElementById(`list-radio-${i}`);
-    el.checked = tmp[i]
-    console.log("🚀 ~ file: [id].js ~ line 28 ~ handleSelected ~ dateS", dateS)
+    const el = document.getElementById(`list-radio-${date}`);
+    el.checked = tmp[date]
   }
 
   const goToLocationVote = (e) => {
@@ -61,12 +46,12 @@ function Vote() {
       <label className="block">
         <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Nomi Dates</h3>
         <ul className="w-48 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-          {plan.date.map((el, i) => (
+          {Object.keys(plan.date).map((el, i) => (
 
             <li className="w-full rounded-t-lg border-b border-gray-200 dark:border-gray-600">
               <div className="flex items-center pl-3">
-                <input onClick={(e) => handleSelected(e, i)} id={`list-radio-${i}`} type="radio" value={dateS[i]} name={`list-radio-${i}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
-                <label for="list-radio-license" className="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{ts_to_date(el)}</label>
+                <input onClick={(e) => handleSelected(e, plan.date[el])} id={`list-radio-${plan.date[el]}`} type="radio" name={`list-radio-${plan.date[el]}`} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" />
+                <label for="list-radio-license" className="py-3 ml-2 w-full text-sm font-medium text-gray-900 dark:text-gray-300">{ts_to_date(plan.date[el])}</label>
               </div>
             </li>
           ))}

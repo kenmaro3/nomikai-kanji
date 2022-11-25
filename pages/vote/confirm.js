@@ -5,6 +5,8 @@ import { voteSlice } from "../../store/vote";
 import axios from "axios";
 import { useRouter } from "next/router"
 
+import { useReward } from 'react-rewards';
+
 import { ts_to_date } from "../../lib/util"
 
 
@@ -15,27 +17,56 @@ function VoteConfirm() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  const { reward, isAnimating } = useReward('rewardId', 'confetti');
+
+  function sleep(waitSec, callbackFunc) {
+
+    // 経過時間（秒）
+    var spanedSec = 0;
+
+    // 1秒間隔で無名関数を実行
+    var id = setInterval(function () {
+
+      spanedSec++;
+
+      // 経過時間 >= 待機時間の場合、待機終了。
+      if (spanedSec >= waitSec) {
+
+        // タイマー停止
+        clearInterval(id);
+
+        // 完了時、コールバック関数を実行
+        if (callbackFunc) callbackFunc();
+      }
+    }, 1000);
+
+  }
+
 
   const goToModify = (e) => {
     e.preventDefault();
-    dispatch(voteSlice.actions.reset())
+    //dispatch(voteSlice.actions.reset())
     dispatch(voteSlice.actions.setPlanId(plan.id));
     dispatch(voteSlice.actions.setVoterId(user.id));
     router.push(`/vote/${plan.id}`);
   };
 
   const goToOk = async (e) => {
+    reward()
     e.preventDefault();
-    const res = await axios.post("/api/plans/vote", {
-      voter_id: vote.voter_id,
-      plan_id: vote.plan_id,
-      location: vote.location,
-      venue: vote.venue,
-      date: vote.date,
-    })
-    console.log("🚀 ~ file: confirm.js ~ line 31 ~ goToOk ~ res", res)
 
-    router.push(`/nomi/${plan.id}`);
+    sleep(1, async function () {
+      const res = await axios.post("/api/plans/vote", {
+        voter_id: vote.voter_id,
+        plan_id: vote.plan_id,
+        location: vote.location,
+        venue: vote.venue,
+        date: vote.date,
+      })
+
+      router.push(`/nomi/${vote.plan_id}`);
+
+    })
   };
 
 
@@ -49,28 +80,62 @@ function VoteConfirm() {
           <div className="mx-2 flex flex-col">
             <div className="mt-1 text-md font-medium text-slate-800">飲み会名: <div className="text-md text-slate-600">{plan.name}</div></div>
             <div className="mt-1 text-md font-medium text-slate-800">日時 Vote:
-              <span className="text-md text-slate-600">{vote.date?.map((el) => (<div className={el ? `` : `line-through`}>{ts_to_date(el)}</div>))}</span>
+              {
+                vote.date &&
+                <span className="text-md text-slate-600">{Object.keys(vote.date).map((el) => (<div className={vote.date[el] ? `` : `line-through`}>{ts_to_date(Number(el))}</div>))}</span>
+              }
             </div>
 
           </div>
 
           <div className="mr-2 ml-4 flex flex-col">
             <div className="mt-1 text-md font-medium text-slate-800">場所 Vote:
-              <span className="text-md text-slate-600">{vote.location?.map((el, i) => (<div className={el ? `` : `line-through`}>{plan.location[i]}</div>))}</span>
+              {
+                vote.location &&
+                <span className="text-md text-slate-600"></span>
+              }
+              <span className="text-md text-slate-600">
+                {
+                  (() => {
+                    if (vote.location) {
+                      return Object.keys(vote.location).map((el, i) => {
+                        if (el !== "null") {
+                          return (
+                            <div className={vote.location[el] ? `` : `line-through`}>{el}</div>
+                          )
+                        }
+                      }
+                      )
+
+                    }
+
+                  })()
+                }
+              </span>
             </div>
 
             <div className="mt-1 text-md font-medium text-slate-800">お店 Vote:
               {
-                vote.venue?.map((venueElement) => (
-                  <div>
-                    <a href={venueElement} className="text-md text-slate-600">{venueElement}</a>
-                  </div>
-                ))
+                (() => {
+                  if (vote.venue) {
+                    return Object.keys(vote.venue).map((location) => {
+                      return Object.keys(vote.venue[location]).map((link) => {
+
+                        if (vote.venue[location][link]) {
+                          return (
+                            <div>
+                              <a href={link} target="_blank" rel="noopener noreferrer" className="text-md text-slate-600">{link}</a>
+                            </div>
+                          )
+                        }
+                      })
+                    })
+
+                  }
+                })()
               }
             </div>
-
           </div>
-
         </div>
       </label >
 
@@ -83,11 +148,13 @@ function VoteConfirm() {
         </button>
 
         <button
+          disabled={isAnimating}
           onClick={(e) => goToOk(e)}
           className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
         >
           OK
         </button>
+        <span id="rewardId" />
       </div>
     </div >
   )

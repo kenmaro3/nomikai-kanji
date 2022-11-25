@@ -24,19 +24,20 @@ function VoteResult() {
 
 
     useEffect(() => {
-
         (async () => {
             const res = await axios.get(`/api/plans/vote/result/${id}`)
-            console.log("here")
-            console.log(res.data)
-            setCount(res.data.datas.count)
-            setDate(res.data.datas.date)
-            setLocation(res.data.datas.location)
-            setVenue(res.data.datas.venue)
+            setCount(res.data.count)
+            setDate(res.data.date)
+            setLocation(res.data.location)
+            setVenue(res.data.venue)
         })()
 
+    }, [id])
 
-    }, [])
+    const goBack = (e) => {
+        e.preventDefault()
+        router.push(`/nomi/${id}`)
+    }
 
 
 
@@ -48,29 +49,47 @@ function VoteResult() {
                 <h3 className="group-hover:text-white">🐱投票結果</h3>
                 <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{plan?.name}</h3>
             </div>
-            <p className="text-slate-500 group-hover:text-white text-sm">Host: {plan?.host}</p>
+            <p className="text-slate-500 group-hover:text-white text-sm">Host: {plan?.host_id}</p>
 
-            <div className='mt-3 flex flex-col items-center'>
-                <div>投票数: {count}</div>
+            <div className='mt-4 flex flex-col items-center'>
+                <div><span className='text-slate-700 text-md'>投票数</span> <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{count}</span></div>
+                <div className='flex flex-col mt-4 border-black px-3 py-2'>
+                    <div className='py-2'>
+                        {
+                            Object.keys(date).map((key) => (
+                                <div className='text-slate-700 text-md my-1'>{ts_to_date(Number(key))} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{date[key]}</span></div>
+                            ))
+                        }
+                    </div>
 
-                {
-                    Object.keys(date).map((key) => (
-                        <div>{ts_to_date(Number(key))} : {date[key]}</div>
-                    ))
-                }
-                {
-                    Object.keys(location).map((key) => (
-                        <div>{key} : {location[key]}</div>
-                    ))
-                }
-                {
-                    Object.keys(venue).map((key) => (
-                        <div>{key} : {venue[key]}</div>
-                    ))
-                }
+                    <div className='py-2'>
+                        {
+                            Object.keys(location).map((key) => (
+                                <div className='text-slate-700 text-md my-1'>{key} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{location[key]}</span></div>
+                            ))
+                        }
+                    </div>
+
+                    <div className='py-2'>
+                        {
+                            Object.keys(venue).map((key) => (
+                                <div className='text-slate-700 text-md my-1'>{key} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</span></div>
+                            ))
+                        }
+
+                    </div>
+
+                </div>
+
 
 
             </div>
+            <button
+                onClick={(e) => goBack(e)}
+                className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
+            >
+                戻る
+            </button>
             {/* <div>日時: {date}</div>
             <div>投票数: {count}</div>
             <div>投票数: {count}</div> */}
