@@ -18,9 +18,14 @@ function NomiElement() {
     const user = useSelector((state) => state.user)
     const dispatch = useDispatch();
 
+    const [name, setName] = useState()
+    const [pictureUrl, setPictureUrl] = useState()
+    const [userId, setUserId] = useState()
+
     const [modal, setModal] = useState(false)
     const [passcode, setPasscode] = useState()
     const [error, setError] = useState(false)
+    const [userIdError, setUserIdError] = useState(false)
 
     const [planToShow, setPlanToShow] = useState()
 
@@ -48,27 +53,65 @@ function NomiElement() {
         }
 
     }
+    const liffStart = () => {
+        import("@line/liff").then((liff) => {
+            if (liff.ready) {
+                liff
+                    .getProfile()
+                    .then((profile) => {
+                        setName(profile.displayName)
+                        setPictureUrl(profile.pictureUrl)
+                        setUserId(profile.userId)
+                        dispatch(userSlice.actions.setName(profile.displayName));
+                        dispatch(userSlice.actions.setUrl(profile.pictureUrl));
+                        dispatch(userSlice.actions.setId(profile.userId));
+                        setUserIdError(false)
+
+                    })
+                    .catch((err) => {
+                        console.log("error", err);
+                    });
+            }
+        });
+    }
+
+    const checkUserId = () => {
+    }
 
     useEffect(() => {
         getPlan()
     }, [routerId])
 
     useEffect(() => {
+        liffStart()
         const { id } = router.query
         setRouterId(id)
         getPlan()
     }, [router.isReady])
 
+
     const goToPasscode = e => {
+        if (userId === undefined) {
+            setUserIdError(true)
+            return
+        }
         setType("vote")
         setModal(true)
     }
     const goToPasscodeForResult = e => {
+        if (userId === undefined) {
+            setUserIdError(true)
+            return
+        }
         setType("result")
         setModal(true)
     }
 
     const goToPasscodeForDelete = e => {
+        if (userId === undefined) {
+            setUserIdError(true)
+            return
+        }
         setType("delete")
         setModal(true)
     }
@@ -166,14 +209,14 @@ function NomiElement() {
                         <span className="sr-only">Close modal</span>
                     </button>
                     <div className="py-6 px-6 lg:px-8">
-                        <h3 className="mb-4 text-xl font-medium text-gray-900">回答パスコードの入力</h3>
+                        <h3 className="mb-4 text-xl font-medium text-gray-900">パスコードの入力</h3>
                         <form className="space-y-6" action="#">
                             <div>
                                 <label for="text" className="block mb-2 text-sm font-medium text-gray-900 ">カンジ から送信されたパスコードを入力してください。</label>
                                 <input value={passcode} onChange={handlePasscodeChange} type="text" name="passcode" id="passcode" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " required />
                             </div>
                             {error &&
-                                <label for="text" className="block mb-2 text-sm font-medium text-red-900">Invalid passcode</label>
+                                <label for="text" className="block mb-2 text-sm font-medium text-red-900">パスコードが無効です。</label>
                             }
                             {
                                 (() => {
@@ -202,13 +245,32 @@ function NomiElement() {
                 </div>
                 :
                 <div className="flex flex-col ">
-                    <div className="my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
+                    <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
+
+                    {userIdError &&
+                        <label for="text" className="block mb-2 text-sm font-medium text-red-900">ユーザー情報を取得してください。</label>
+                    }
+                    {
+                        (() => {
+                            if (userId === undefined) {
+                                return (
+                                    <button
+                                        onClick={(e) => clickGetUserId(e)}
+                                        className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-2">
+                                        ユーザーIDの取得
+                                    </button>
+                                )
+
+                            }
+
+                        })()
+                    }
                     <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">
                             <h3 className="group-hover:text-white">📆 日時 📍 開催場所投票はコチラ</h3>
                             <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{planToShow?.name}</h3>
                         </div>
-                        <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {planToShow?.host_id}</p>
+                        {/* <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {planToShow?.host_id}</p> */}
                         <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(planToShow?.deadline)}</p>
                     </a>
 

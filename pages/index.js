@@ -29,13 +29,14 @@ export default function Home(props) {
   const nomi = useSelector((state) => state.nomi)
   const user = useSelector((state) => state.user)
 
+  const [error, setError] = useState(false)
+
 
   const dispatch = useDispatch();
 
   const [plans, setPlans] = useState([])
 
-  useEffect(() => {
-    // to avoid `window is not defined` error
+  const liffStart = () => {
     import("@line/liff").then((liff) => {
       if (liff.ready) {
         liff
@@ -47,18 +48,26 @@ export default function Home(props) {
             dispatch(userSlice.actions.setName(profile.displayName));
             dispatch(userSlice.actions.setUrl(profile.pictureUrl));
             dispatch(userSlice.actions.setId(profile.userId));
+            setError(false)
 
           })
           .catch((err) => {
             console.log("error", err);
           });
-
-
       }
-
-
     });
+  }
+
+  useEffect(() => {
+    // to avoid `window is not defined` error
+    liffStart()
   }, []);
+
+
+  const clickGetUserId = (e) => {
+    e.preventDefault()
+    liffStart()
+  }
 
 
   useEffect(() => {
@@ -69,20 +78,20 @@ export default function Home(props) {
         if (res_data !== undefined) {
           setPlans(res_data.datas)
         }
-
       }
-
     })()
 
   }, [userId])
 
+
   const createNomikai = (e) => {
     e.preventDefault();
     dispatch(nomiSlice.actions.reset())
-    if(userId === undefined){
-      dispatch(nomiSlice.actions.setHostId(user.id))
+    if (userId === undefined) {
+      setError(true)
+      return
     }
-    else{
+    else {
       dispatch(nomiSlice.actions.setHostId(userId))
 
     }
@@ -92,7 +101,7 @@ export default function Home(props) {
   return (
     <div>
       <Head>
-        <title>ノミカイ・カンジ</title>
+        <title>ノミカイカンジ</title>
       </Head>
 
       <div className="flex flex-col h-screen items-center justify-center">
@@ -109,7 +118,25 @@ export default function Home(props) {
           />
           <div className="text-slate-700 text-md ml-2">{name}</div>
         </div>
-        <div className="my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
+        <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
+        {error &&
+          <label for="text" className="block mb-2 text-sm font-medium text-red-900">ユーザー情報を取得してください。</label>
+        }
+        {
+          (() => {
+            if (userId === undefined) {
+              return (
+                <button
+                  onClick={(e) => clickGetUserId(e)}
+                  className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-2">
+                  ユーザーIDの取得
+                </button>
+              )
+
+            }
+
+          })()
+        }
         <button
           onClick={(e) => createNomikai(e)}
           className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs mt-2"
@@ -129,10 +156,10 @@ export default function Home(props) {
 
                       <span className="text-md text-slate-700 ml-2">{el.data.name}</span>
                     </div>
-                    <div>
+                    {/* <div>
                       <span className="text-xs text-slate-500">ID</span>
                       <span className="text-xs text-slate-500 ml-2 overflow-hidden">{el.id} </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </Link>

@@ -45,7 +45,7 @@ function VoteConfirm() {
 
   const goToModify = (e) => {
     e.preventDefault();
-    //dispatch(voteSlice.actions.reset())
+    dispatch(voteSlice.actions.reset())
     dispatch(voteSlice.actions.setPlanId(plan.id));
     dispatch(voteSlice.actions.setVoterId(user.id));
     router.push(`/vote/${plan.id}`);
