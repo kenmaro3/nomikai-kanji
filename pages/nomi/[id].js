@@ -22,35 +22,21 @@ function NomiElement() {
     const [passcode, setPasscode] = useState()
     const [error, setError] = useState(false)
 
-    const [isClickable, setIsClickable] = useState(false)
-
     const [type, setType] = useState("vote")
 
     const router = useRouter()
     const { id } = router.query
 
     const goToPasscode = e => {
-        if (!isClickable) {
-            getPlan()
-            return
-        }
         setType("vote")
         setModal(true)
     }
     const goToPasscodeForResult = e => {
-        if (!isClickable) {
-            getPlan()
-            return
-        }
         setType("result")
         setModal(true)
     }
 
     const goToPasscodeForDelete = e => {
-        if (!isClickable) {
-            getPlan()
-            return
-        }
         setType("delete")
         setModal(true)
     }
@@ -79,7 +65,6 @@ function NomiElement() {
                 dispatch(voteSlice.actions.setPlanId(id))
                 dispatch(voteSlice.actions.setVoterId(user.id))
                 router.push(`/vote/${id}`)
-                setIsClickable(true)
                 setError(false)
             }
             else {
@@ -208,6 +193,7 @@ function NomiElement() {
                 </div>
                 :
                 <div className="flex flex-col ">
+                    <div className="my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
                     <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">
                             <h3 className="group-hover:text-white">📆 日時 📍 開催場所投票はコチラ</h3>
