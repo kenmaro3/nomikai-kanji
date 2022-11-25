@@ -21,3 +21,9 @@ ref: https://zenn.dev/jiyuujin/articles/liff-on-nextjs
 ```
 HTTPS=true node ./server.js
 ```
+
+
+for heroku
+```
+"build": "NODE_OPTIONS='--openssl-legacy-provider' next build",
+```
