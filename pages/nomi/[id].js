@@ -27,7 +27,37 @@ function NomiElement() {
     const [type, setType] = useState("vote")
 
     const router = useRouter()
-    const { id } = router.query
+
+    const [routerId, setRouterId] = useState()
+
+    const getPlan = async () => {
+        if (routerId !== undefined) {
+            const res = await axios.get(`/api/plans/${routerId}`)
+            if (res.data.datas !== undefined) {
+                let tmp = { ...res.data.datas }
+                tmp["host_id"] = routerId
+                setPlanToShow(tmp)
+
+                dispatch(planSlice.actions.set(tmp))
+            }
+            else {
+                router.push("/")
+
+            }
+
+        }
+
+    }
+
+    useEffect(() => {
+        getPlan()
+    }, [routerId])
+
+    useEffect(() => {
+        const { id } = router.query
+        setRouterId(id)
+        getPlan()
+    }, [router.isReady])
 
     const goToPasscode = e => {
         setType("vote")
@@ -58,15 +88,15 @@ function NomiElement() {
         setError(false)
 
         if (passcode !== undefined) {
-            const res = await axios.post(`/api/plans/${id}`, {
+            const res = await axios.post(`/api/plans/${routerId}`, {
                 passcode: passcode,
             })
 
             const data = res.data
             if (data.res === "good") {
-                dispatch(voteSlice.actions.setPlanId(id))
+                dispatch(voteSlice.actions.setPlanId(routerId))
                 dispatch(voteSlice.actions.setVoterId(user.id))
-                router.push(`/vote/${id}`)
+                router.push(`/vote/${routerId}`)
                 setError(false)
             }
             else {
@@ -83,13 +113,13 @@ function NomiElement() {
         setError(false)
 
         if (passcode !== undefined) {
-            const res = await axios.post(`/api/plans/${id}`, {
+            const res = await axios.post(`/api/plans/${routerId}`, {
                 passcode: passcode,
             })
 
             const data = res.data
             if (data.res === "good") {
-                router.push(`/vote/result/${id}`)
+                router.push(`/vote/result/${routerId}`)
                 setError(false)
             }
             else {
@@ -106,7 +136,7 @@ function NomiElement() {
         setError(false)
 
         if (passcode !== undefined) {
-            const res = await axios.post(`/api/plans/delete/${id}`, {
+            const res = await axios.post(`/api/plans/delete/${routerId}`, {
                 passcode: passcode,
                 user_id: user.id
             })
@@ -125,28 +155,6 @@ function NomiElement() {
         }
     }
 
-    const getPlan = async () => {
-        if (id !== undefined) {
-            const res = await axios.get(`/api/plans/${id}`)
-            if (res.data.datas !== undefined) {
-                let tmp = { ...res.data.datas }
-                tmp["host_id"] = id
-                setPlanToShow(tmp)
-
-                dispatch(planSlice.actions.set(tmp))
-            }
-            else {
-                router.push("/")
-
-            }
-
-        }
-
-    }
-
-    useEffect(() => {
-        getPlan()
-    }, [])
 
     return (
         <div className="flex flex-col h-screen items-center justify-center">

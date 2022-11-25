@@ -23,7 +23,9 @@ function VoteVenue() {
       let tmp2 = {}
       Object.keys(plan.venue[location]).forEach((linkIndex) => {
         //tmp2[plan.venue[location][linkIndex]] = false
-        tmp2[plan.venue[location][linkIndex]] = false
+        if (plan.venue[location][linkIndex] !== "") {
+          tmp2[plan.venue[location][linkIndex]] = false
+        }
       })
       tmp[location] = tmp2
     })
@@ -71,8 +73,8 @@ function VoteVenue() {
 
 
         {(() => {
-          if (vote.location) {
-            return Object.keys(pplanToShowlan.venue).map((location) => {
+          if (vote.location && planToShow !== undefined) {
+            return Object.keys(planToShow.venue).map((location) => {
               if (vote.location[location]) {
                 return (
                   <>

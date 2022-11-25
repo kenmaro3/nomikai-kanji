@@ -39,6 +39,15 @@ function VoteResult() {
         router.push(`/nomi/${id}`)
     }
 
+    function truncate(x, limit) {
+        if (x.length <= limit) {
+            return x
+        }
+        else {
+            return x.slice(0, limit) + "..."
+        }
+    }
+
 
 
     return (
@@ -53,7 +62,7 @@ function VoteResult() {
 
             <div className='mt-4 flex flex-col items-center'>
                 <div><span className='text-slate-700 text-md'>投票数</span> <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{count}</span></div>
-                <div className='flex flex-col mt-4 border-black px-3 py-2'>
+                <div className='flex flex-col mt-4 border-black px-3 py-2 justify-center items-center'>
                     <div className='py-2'>
                         {
                             Object.keys(date).map((key) => (
@@ -73,7 +82,7 @@ function VoteResult() {
                     <div className='py-2'>
                         {
                             Object.keys(venue).map((key) => (
-                                <div className='text-slate-700 text-sm my-1'>{key} <a href={venue[key]} target="_blank" rel="noopener noreferrer" className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</a></div>
+                                <div className='text-slate-700 text-sm my-1'>{truncate(key, 32)} <a href={venue[key]} target="_blank" rel="noopener noreferrer" className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</a></div>
                             ))
                         }
 
