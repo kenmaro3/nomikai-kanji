@@ -31,7 +31,7 @@ function NomiDate() {
     if (dates.length === 0) {
       return
     }
-    router.push("/nomi/location");
+    router.push("/nomi/time");
   };
 
 

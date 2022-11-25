@@ -23,6 +23,9 @@ export const voteSlice = createSlice({
         setDate(state, action) {
             state.date = action.payload
         },
+        setTime(state, action) {
+            state.time = action.payload
+        },
         setLocation(state, action) {
             state.location = action.payload
         },

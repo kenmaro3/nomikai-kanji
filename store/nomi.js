@@ -4,6 +4,7 @@ const initialState = {
   name: null,
   location: [],
   date: [],
+  time: [],
   venue: [["", "", ""], ["", "", ""]],
   passcode: null,
   deadline: null,
@@ -20,6 +21,9 @@ export const nomiSlice = createSlice({
     },
     setDate(state, action) {
       state.date = action.payload.date
+    },
+    setTime(state, action) {
+      state.time = action.payload.time
     },
     setLocation(state, action) {
       state.location = action.payload.location

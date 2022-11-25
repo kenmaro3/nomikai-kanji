@@ -7,6 +7,7 @@ const initialState = {
     location: {},
     venue: {},
     date: {},
+    time: {},
     deadline: null,
     host_id: null,
 };
@@ -25,6 +26,7 @@ export const planSlice = createSlice({
             state.host_id = action.payload.host_id
             state.deadline = action.payload.deadline
             state.date = action.payload.date
+            state.time = action.payload.time
         },
     }
 })

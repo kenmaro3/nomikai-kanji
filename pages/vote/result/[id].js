@@ -18,6 +18,7 @@ function VoteResult() {
 
     const [count, setCount] = useState()
     const [date, setDate] = useState({})
+    const [time, setTime] = useState({})
     const [location, setLocation] = useState({})
     const [venue, setVenue] = useState({})
 
@@ -28,6 +29,7 @@ function VoteResult() {
             const res = await axios.get(`/api/plans/vote/result/${id}`)
             setCount(res.data.count)
             setDate(res.data.date)
+            setTime(res.data.time)
             setLocation(res.data.location)
             setVenue(res.data.venue)
         })()
@@ -67,6 +69,14 @@ function VoteResult() {
                         {
                             Object.keys(date).map((key) => (
                                 <div className='text-slate-700 text-sm my-1'>{ts_to_date(Number(key))} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{date[key]}</span></div>
+                            ))
+                        }
+                    </div>
+
+                    <div className='py-2'>
+                        {
+                            Object.keys(time).map((key) => (
+                                <div className='text-slate-700 text-sm my-1'>{key} <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{time[key]}</span></div>
                             ))
                         }
                     </div>

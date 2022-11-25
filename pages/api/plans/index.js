@@ -12,11 +12,12 @@ export default async function handler(req, res) {
   }
   else {
     const passcode = generatePasscode()
-    const { name, date, location, deadline, host_id, venue } = req.body
+    const { name, date, time, location, deadline, host_id, venue } = req.body
     try {
       const docRef = await addDoc(collection(db, "datas"), {
         name: name,
         date: arrayToObj(date),
+        time: arrayToObj(time),
         passcode: passcode,
         location: arrayToObj(location),
         deadline: deadline,

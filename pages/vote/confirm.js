@@ -62,6 +62,7 @@ function VoteConfirm() {
         location: vote.location,
         venue: vote.venue,
         date: vote.date,
+        time: vote.time,
       })
 
       router.push(`/nomi/${vote.plan_id}`);
@@ -74,17 +75,23 @@ function VoteConfirm() {
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
-          Confirmation
+          内容確認
         </span>
         <div className="mx-2 flex flex-col">
-          <div className="mt-1 text-sm font-medium text-slate-800">飲み会名: <div className="text-sm text-slate-600">{plan.name}</div></div>
-          <div className="mt-1 text-sm font-medium text-slate-800">日時 Vote:
+          <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">飲み会名: <div className="text-sm text-slate-600">{plan.name}</div></div>
+          <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">日時 Vote:
             {
               vote.date &&
               <span className="text-sm text-slate-600">{Object.keys(vote.date).map((el) => (<div className={vote.date[el] ? `` : `line-through`}>{ts_to_date(Number(el))}</div>))}</span>
             }
           </div>
-          <div className="mt-1 text-sm font-medium text-slate-800">場所 Vote:
+          <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">時刻 Vote:
+            {
+              vote.time &&
+              <span className="text-sm text-slate-600">{Object.keys(vote.time).map((el) => (<div className={vote.time[el] ? `` : `line-through`}>{el}</div>))}</span>
+            }
+          </div>
+          <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">場所 Vote:
             {
               vote.location &&
               <span className="text-sm text-slate-600"></span>
@@ -109,7 +116,7 @@ function VoteConfirm() {
             </span>
           </div>
 
-          <div className="mt-1 text-sm font-medium text-slate-800">お店 Vote:
+          <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">お店 Vote:
             {
               (() => {
                 if (vote.venue) {

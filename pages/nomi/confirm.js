@@ -66,6 +66,7 @@ function Confirm() {
       const res = await axios.post("/api/plans", {
         name: nomi.name,
         date: nomi.date,
+        time: nomi.time,
         location: nomi.location,
         venue: nomi.venue,
         deadline: nomi.deadline,
@@ -157,17 +158,20 @@ function Confirm() {
         <div className="flex flex-col h-screen justify-center items-center">
           <label className="block">
             <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
-              Confirmation
+              内容確認
             </span>
             <div className="mx-2 flex flex-col">
-              <div className="mt-1 text-sm font-medium text-slate-800">飲み会名: <span className="text-md text-slate-600">{nomi.name}</span></div>
-              <div className="mt-1 text-sm font-medium text-slate-800">日時:
+              <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">飲み会名: <span className="text-md text-slate-600">{nomi.name}</span></div>
+              <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">日時:
                 <span className="text-sm text-slate-600">{nomi.date?.map((el) => (<div>{ts_to_date(el)}</div>))}</span>
               </div>
-              <div className="mt-1 text-sm font-medium text-slate-800">場所:
+              <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">時刻:
+                <span className="text-sm text-slate-600">{nomi.time?.map((el) => (<div>{el}</div>))}</span>
+              </div>
+              <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">場所:
                 <span className="text-sm text-slate-600">{nomi.location?.map((el) => (<div>{el}</div>))}</span>
               </div>
-              <div className="mt-1 text-sm font-medium text-slate-800">お店候補:
+              <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">お店候補:
                 {
                   nomi.venue.map((placeElement) => (
                     <div>
@@ -187,7 +191,7 @@ function Confirm() {
                 }
               </div>
 
-              <div className="mt-1 text-sm font-medium text-slate-800">回答締め切り:
+              <div className="border px-2 py-1 rounded mt-1 text-sm font-medium text-slate-800">回答締め切り:
                 {/* {nomi.deadline?.map((el) => (<div>{ts_to_date(el)}</div>))} */}
                 <div className="text-sm text-slate-600">{ts_to_date(nomi.deadline)}</div>
               </div>

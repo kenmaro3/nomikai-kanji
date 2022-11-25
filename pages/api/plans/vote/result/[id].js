@@ -13,6 +13,9 @@ const get_res = (plan_id, type) => {
             else if (type == "date") {
                 tmp.push(vote.date)
             }
+            else if (type == "time") {
+                tmp.push(vote.time)
+            }
             else if (type == "venue") {
                 tmp.push(vote.venue)
             }
@@ -51,6 +54,7 @@ export default async function handler(req, res) {
         // second count
 
         let date_res = {}
+        let time_res = {}
         let location_res = {}
         let venue_res = {}
 
@@ -62,6 +66,14 @@ export default async function handler(req, res) {
                 }
                 else {
                     date_res[date] = 1
+                }
+            })
+            Object.keys(vote.time).forEach((time) => {
+                if (time_res[time] !== undefined) {
+                    time_res[time] += 1
+                }
+                else {
+                    time_res[time] = 1
                 }
             })
 
@@ -89,6 +101,7 @@ export default async function handler(req, res) {
         res.status(200).json({
             count: votes.length,
             date: date_res,
+            time: time_res,
             location: location_res,
             venue: venue_res
         })
