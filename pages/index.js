@@ -13,6 +13,7 @@ import { nomiSlice } from "../store/nomi";
 import Header from "../components/header";
 
 import Image from "next/image"
+import Typed from "react-typed"
 
 export default function Home(props) {
   /** You can access to liff and liffError object through the props.
@@ -124,7 +125,16 @@ export default function Home(props) {
           }
           <div className="text-slate-700 text-md ml-2">{name}</div>
         </div>
-        <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
+        {/* <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div> */}
+        <Typed
+          className="text-center my-2 text-slate-700 text-sm"
+          strings={[
+            "ノミカイカンジでノミタイカンジ。",
+          ]}
+          typeSpeed={150}
+          backSpeed={50}
+          loop
+        />
         {error &&
           <label for="text" className="block mb-2 text-sm font-medium text-red-900">ユーザー情報を取得してください。</label>
         }

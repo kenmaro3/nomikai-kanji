@@ -21,6 +21,7 @@
     "react-multi-date-picker": "^3.3.4",
     "react-redux": "^8.0.5",
     "react-rewards": "^2.0.4",
+    "react-typed": "^1.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2"

@@ -10,7 +10,7 @@ import { ts_to_date } from "../../lib/util"
 import { voteSlice } from '../../store/vote';
 
 import Header from '../../components/header';
-import Image from 'next/image'
+import Typed from "react-typed"
 
 
 function NomiElement() {
@@ -247,7 +247,16 @@ function NomiElement() {
                 </div>
                 :
                 <div className="flex flex-col ">
-                    <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div>
+                    {/* <div className="text-center my-2 text-slate-700 text-sm">ノミカイカンジでノミタイカンジ。</div> */}
+                    <Typed
+                        className="text-center my-2 text-slate-700 text-sm"
+                        strings={[
+                            "ノミカイカンジでノミタイカンジ。",
+                        ]}
+                        typeSpeed={150}
+                        backSpeed={50}
+                        loop
+                    />
 
                     {userIdError &&
                         <label for="text" className="block mb-2 text-sm font-medium text-red-900">ユーザー情報を取得してください。</label>
