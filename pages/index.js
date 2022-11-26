@@ -37,6 +37,7 @@ export default function Home(props) {
   const dispatch = useDispatch();
 
   const [plans, setPlans] = useState([])
+  const [votedPlans, setVotedPlans] = useState([])
 
   const liffStart = () => {
     import("@line/liff").then((liff) => {
@@ -78,7 +79,8 @@ export default function Home(props) {
         const res = await axios.get(`/api/plans/user/${userId}`)
         const res_data = await res.data
         if (res_data !== undefined) {
-          setPlans(res_data.datas)
+          setPlans(res_data.hosted_datas)
+          setVotedPlans(res_data.voted_datas)
         }
       }
     })()
@@ -149,21 +151,31 @@ export default function Home(props) {
         </button>
 
         <div className="mt-4 p-2 flex flex-col items-center justify-center">
-          <div className="mb-2 font-bold">マイ・ノミカイ</div>
+          <div className="mb-2 font-bold">カンジしてるノミカイ</div>
           {
             plans?.map((el) => (
               <Link href={`/nomi/${el.id}`}>
                 <div className="mt-1 cursor-pointer shadow-md px-3 py-2 rounded-lg hover:bg-sky-400">
                   <div className="flex flex-col items-center justify-center">
                     <div className="flex flex-row">
-                      <span className="text-md text-slate-700">ノミカイネーム </span>
+                      <span className="text-md text-slate-700 ml-2">{el.data.name}</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+            ))
+          }
+          <div className="mt-6 mb-2 font-bold">トウヒョウしてるノミカイ</div>
+          {
+            votedPlans?.map((el) => (
+              <Link href={`/nomi/${el.id}`}>
+                <div className="mt-1 cursor-pointer shadow-md px-3 py-2 rounded-lg hover:bg-sky-400">
+                  <div className="flex flex-col items-center justify-center">
+                    <div className="flex flex-row">
 
                       <span className="text-md text-slate-700 ml-2">{el.data.name}</span>
                     </div>
-                    {/* <div>
-                      <span className="text-xs text-slate-500">ID</span>
-                      <span className="text-xs text-slate-500 ml-2 overflow-hidden">{el.id} </span>
-                    </div> */}
                   </div>
                 </div>
               </Link>

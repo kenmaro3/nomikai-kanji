@@ -7,7 +7,7 @@ import { useRouter } from "next/router"
 
 import { useReward } from 'react-rewards';
 
-import { ts_to_date } from "../../lib/util"
+import { ts_to_date, extract_http_url } from "../../lib/util"
 
 
 function VoteConfirm() {
@@ -123,11 +123,10 @@ function VoteConfirm() {
                 if (vote.venue) {
                   return Object.keys(vote.venue).map((location) => {
                     return Object.keys(vote.venue[location]).map((link) => {
-
                       if (vote.venue[location][link]) {
                         return (
                           <div>
-                            <a href={link} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{link}</a>
+                            <a href={extract_http_url(link)} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{link}</a>
                           </div>
                         )
                       }

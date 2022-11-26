@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import axios from "axios";
 import { useReward } from 'react-rewards';
 
-import { ts_to_date } from "../../lib/util"
+import { ts_to_date, extract_http_url } from "../../lib/util"
 
 function Confirm() {
   const router = useRouter()
@@ -176,15 +176,15 @@ function Confirm() {
                   nomi.venue.map((placeElement) => (
                     <div>
                       <div>
-                        <a href={placeElement[0]} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[0]}</a>
+                        <a href={extract_http_url(placeElement[0])} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[0]}</a>
                       </div>
 
                       <div>
-                        <a href={placeElement[1]} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[1]}</a>
+                        <a href={extract_http_url(placeElement[1])} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[1]}</a>
                       </div>
 
                       <div>
-                        <a href={placeElement[2]} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[2]}</a>
+                        <a href={extract_http_url(placeElement[2])} target="_blank" rel="noopener noreferrer" className="text-sm text-slate-600">{placeElement[2]}</a>
                       </div>
                     </div>
                   ))

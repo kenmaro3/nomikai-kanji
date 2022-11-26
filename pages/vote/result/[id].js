@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { ts_to_date } from "../../../lib/util"
+import { ts_to_date, extract_http_url } from "../../../lib/util"
 
 import Image from 'next/image'
 
@@ -33,7 +33,6 @@ function VoteResult() {
     useEffect(() => {
         (async () => {
             const res = await axios.get(`/api/plans/vote/result/${id}`)
-            console.log(res.data)
             setCount(res.data.count)
             setDate(res.data.date)
             setTime(res.data.time)
@@ -77,7 +76,7 @@ function VoteResult() {
             <div className='mt-4 flex flex-col items-center'>
                 <div><span className='text-slate-700 text-md'>投票数</span> <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{count}</span></div>
                 <div className='flex flex-col mt-4 border-black px-3 py-2 justify-center items-center'>
-                    <div className='py-2'>
+                    <div className='border rounded py-1 pl-3 pr-20'>
                         {
                             (() => {
                                 return (
@@ -108,7 +107,7 @@ function VoteResult() {
                         }
                     </div>
 
-                    <div className='py-2'>
+                    <div className='mt-3 border rounded py-1 pl-3 pr-20'>
                         {
                             (() => {
                                 return (
@@ -137,7 +136,7 @@ function VoteResult() {
                         }
                     </div>
 
-                    <div className='py-2'>
+                    <div className='mt-3 border rounded py-1 pl-3 pr-20'>
                         {
                             (() => {
                                 return (
@@ -166,13 +165,13 @@ function VoteResult() {
                         }
                     </div>
 
-                    <div className='py-2'>
+                    <div className='mt-3 border rounded py-1 pl-3 pr-20'>
                         {
                             (() => {
                                 return (
                                     Object.keys(venue).map((key) => (
                                         <div className='flex flex-row items-center justify-center'>
-                                            <div className='text-slate-700 text-sm my-1'>{truncate(key, 32)} <a href={venue[key]} target="_blank" rel="noopener noreferrer" className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</a></div>
+                                            <div className='text-slate-700 text-sm my-1'><a className="text-slate-700 text-sm" href={extract_http_url(key)} target="_blank" rel="noopener noreferrer">{truncate(key, 20)}</a> <span className='bg-slate-400 px-2 py-1 rounded-full text-white ml-1'>{venue[key]}</span></div>
                                             {
                                                 venueUrl[key] &&
                                                 venueUrl[key].map((url) => (

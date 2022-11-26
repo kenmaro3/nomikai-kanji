@@ -17,16 +17,33 @@ export default async function handler(req, res) {
         let res_list = []
 
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-            res_list.push({id: doc.id, data: doc.data()})
+            res_list.push({ id: doc.id, data: doc.data() })
         });
 
-        
+        // get datas for that user
+        const vote_collection = collection(db, "votes");
+        const q_vote = query(vote_collection,
+            where("voter_id", "==", id),
+        );
+        const vote_snapshot = await getDocs(q_vote);
 
-        res.status(200).json({ datas: res_list })
+        let vote_list = []
+
+        vote_snapshot.forEach((doc) => {
+            vote_list.push({ id: doc.id, data: doc.data() })
+        });
 
 
-
+        let voted_datas = []
+        await Promise.all(
+            vote_list.map(async (vote) => {
+                const ref = doc(db, "datas", vote.data.plan_id)
+                const docSnap = await getDoc(ref)
+                //voted_datas.push(docSnap.data())
+                voted_datas.push({ id: docSnap.id, data: docSnap.data() })
+            })
+        )
+        res.status(200).json({ hosted_datas: res_list, voted_datas: voted_datas })
     }
     else {
         res.status(404).json({ info: "not allowed" })
