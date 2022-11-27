@@ -63,46 +63,54 @@ export default async function handler(req, res) {
 
         votes.forEach((vote) => {
             Object.keys(vote.date).forEach((date) => {
-                if (date_res[date] !== undefined) {
-                    date_res[date] += 1
-                    date_res_url[date].push(vote.voter_url)
-                }
-                else {
-                    date_res[date] = 1
-                    date_res_url[date] = [vote.voter_url]
+                if (vote.date[date]) {
+                    if (date_res[date] !== undefined) {
+                        date_res[date] += 1
+                        date_res_url[date].push(vote.voter_url)
+                    }
+                    else {
+                        date_res[date] = 1
+                        date_res_url[date] = [vote.voter_url]
+                    }
                 }
             })
             Object.keys(vote.time).forEach((time) => {
-                if (time_res[time] !== undefined) {
-                    time_res[time] += 1
-                    time_res_url[time].push(vote.voter_url)
-                }
-                else {
-                    time_res[time] = 1
-                    time_res_url[time] = [vote.voter_url]
+                if (vote.time[time]) {
+                    if (time_res[time] !== undefined) {
+                        time_res[time] += 1
+                        time_res_url[time].push(vote.voter_url)
+                    }
+                    else {
+                        time_res[time] = 1
+                        time_res_url[time] = [vote.voter_url]
+                    }
                 }
             })
 
             Object.keys(vote.location).forEach((location) => {
-                if (location_res[location] !== undefined) {
-                    location_res[location] += 1
-                    location_res_url[location].push(vote.voter_url)
-                }
-                else {
-                    location_res[location] = 1
-                    location_res_url[location] = [vote.voter_url]
+                if (vote.location[location]) {
+                    if (location_res[location] !== undefined) {
+                        location_res[location] += 1
+                        location_res_url[location].push(vote.voter_url)
+                    }
+                    else {
+                        location_res[location] = 1
+                        location_res_url[location] = [vote.voter_url]
+                    }
                 }
             })
 
             Object.keys(vote.venue).forEach((location) => {
                 Object.keys(vote.venue[location]).forEach((venue) => {
-                    if (venue_res[venue] != undefined) {
-                        venue_res[venue] += 1
-                        venue_res_url[venue].push(vote.voter_url)
-                    }
-                    else {
-                        venue_res[venue] = 1
-                        venue_res_url[venue] = [vote.voter_url]
+                    if (vote.venue[location][venue]) {
+                        if (venue_res[venue] != undefined) {
+                            venue_res[venue] += 1
+                            venue_res_url[venue].push(vote.voter_url)
+                        }
+                        else {
+                            venue_res[venue] = 1
+                            venue_res_url[venue] = [vote.voter_url]
+                        }
                     }
 
                 })
