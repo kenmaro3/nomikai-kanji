@@ -39,7 +39,7 @@ function NomiDate() {
     <div className="flex flex-col h-screen justify-center items-center">
       <label className="block">
         <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-lg font-medium text-slate-700">
-          📆 ノミカイ日時
+          📆 ノミカイ日時(複数選択可)
         </span>
         <div className="mt-3 px-3 py-2">
           <DatePicker value={dates} onChange={(date) => handleOnChange(date)} multiple />
