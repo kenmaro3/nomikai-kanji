@@ -92,7 +92,7 @@ function NomiElement() {
 
 
     const goToPasscode = e => {
-        if (userId === undefined) {
+        if (userId == undefined || userId == null) {
             setUserIdError(true)
             return
         }
@@ -100,7 +100,7 @@ function NomiElement() {
         setModal(true)
     }
     const goToPasscodeForResult = e => {
-        if (userId === undefined) {
+        if (userId == undefined || userId == null) {
             setUserIdError(true)
             return
         }
@@ -109,7 +109,7 @@ function NomiElement() {
     }
 
     const goToPasscodeForDelete = e => {
-        if (userId === undefined) {
+        if (userId == undefined || userId == null) {
             setUserIdError(true)
             return
         }
