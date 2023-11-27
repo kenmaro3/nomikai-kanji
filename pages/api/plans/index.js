@@ -1,6 +1,6 @@
 import { datas, generateUuid, generatePasscode } from "../db"
 import { db } from "../../../lib/firebase"
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase-admin/firestore";
 import { arrayToObj, venueArrayToObj } from "../../../lib/util";
 
 
