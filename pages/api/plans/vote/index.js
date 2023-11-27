@@ -1,4 +1,5 @@
 import { generatePasscode } from "../../db"
+import { where } from "firebase-admin/firestore"
 //import { db } from "../../../../lib/firebase"
 // import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
 // import { collection, query, where, deleteDoc } from "firebase/firestore";
@@ -30,7 +31,7 @@ export default async function handler(req, res) {
         //     where("plan_id", "==", plan_id),
         //     where("voter_id", "==", voter_id),
         // );
-        const q = db.query(votes_collection, db.where("plan_id", "==", plan_id), db.where("voter_id", "==", voter_id));
+        const q = db.query(votes_collection, where("plan_id", "==", plan_id), where("voter_id", "==", voter_id));
 
         let vote_id_already_exists = []
         //const querySnapshot = await getDocs(q);

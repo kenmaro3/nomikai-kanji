@@ -2,6 +2,7 @@
 // import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
 // import { collection, query, where, deleteDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase-admin-config";
+import { where } from "firebase-admin/firestore"
 
 const findDataIndexById = (x, target) => {
   let res = []
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
           //const votes_collection = collection(db, "votes");
           const votes_collection = db.collection("votes")
           const q = db.query(votes_collection,
-            db.where("plan_id", "==", id),
+            where("plan_id", "==", id),
           );
 
           let vote_id_already_exists = []

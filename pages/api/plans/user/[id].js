@@ -1,4 +1,4 @@
-//import { db } from "../../../../lib/firebase"
+import { where } from "firebase-admin/firestore"
 // import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
 // import { collection, query, where, deleteDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase-admin-config";
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
         // const q = query(data_collection,
         //     where("host_id", "==", id),
         // );
-        const q = db.query(data_collection, db.where("host_id", "==", id));
+        const q = db.query(data_collection, where("host_id", "==", id));
         //const querySnapshot = await getDocs(q);
         const querySnapshot = await db.getDocs(q);
 
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         // const q_vote = query(vote_collection,
         //     where("voter_id", "==", id),
         // );
-        const q_vote = db.query(vote_collection, db.where("voter_id", "==", id));
+        const q_vote = db.query(vote_collection, where("voter_id", "==", id));
         ////const vote_snapshot = await getDocs(q_vote);
         const vote_snapshot = await db.getDocs(q_vote);
 
