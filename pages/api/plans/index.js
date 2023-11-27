@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     const { name, date, time, location, deadline, host_id, venue } = req.body
     try {
       const ref = db.collection("datas");
-      const res = await ref.add({
+      const resAdd = await ref.add({
         name: name,
         date: arrayToObj(date),
         time: arrayToObj(time),
@@ -34,8 +34,8 @@ export default async function handler(req, res) {
       //   venue: venueArrayToObj(venue, location),
       //   host_id: host_id,
       // });
-      console.log("Document written with ID: ", res.id);
-      res.status(200).json({ id: res.id, passcode: passcode })
+      console.log("Document written with ID: ", resAdd.id);
+      res.status(200).json({ id: resAdd.id, passcode: passcode })
     } catch (e) {
       console.error("Error adding document: ", e);
       res.status(500).json({ info: "something went wrong to add data for writing to firestore" })
