@@ -22,6 +22,8 @@ function Confirm() {
   const [passcode, setPasscode] = useState()
   const [shareUrl, setShareUrl] = useState()
 
+  const [loading, setLoading] = useState(false);
+
 
   const { reward, isAnimating } = useReward('rewardId', 'confetti');
 
@@ -48,6 +50,10 @@ function Confirm() {
 
   }
 
+  useEffect(() => {
+    setLoading(false)
+  }, [])
+
 
   useEffect(() => {
     setShareUrl(`${process.env.NEXT_PUBLIC_URL}nomi/${id}`)
@@ -63,6 +69,8 @@ function Confirm() {
     e.preventDefault();
     sleep(1, async function () {
 
+      setLoading(true)
+
       const res = await axios.post("/api/plans", {
         name: nomi.name,
         date: nomi.date,
@@ -76,6 +84,7 @@ function Confirm() {
       setId(res.data.id)
       setPasscode(res.data.passcode)
 
+      setLoading(false)
       setModal(true)
 
     });
