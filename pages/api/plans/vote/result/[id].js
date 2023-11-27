@@ -1,6 +1,7 @@
 import { datas, votes } from "../../../db"
-import { addDoc, collection, getDocs, getDoc, query, where } from "firebase/firestore";
-import { db } from "../../../../../lib/firebase"
+//import { addDoc, collection, getDocs, getDoc, query, where } from "firebase/firestore";
+import { db } from "../../../../../lib/firebase-admin-config";
+//import { db } from "../../../../../lib/firebase"
 
 
 const get_res = (plan_id, type) => {
@@ -37,13 +38,17 @@ export default async function handler(req, res) {
     if (method == "GET") {
 
         // first get votes where vote.plan_id == plan_id
-        const votes_collection = collection(db, "votes");
-        const q = query(votes_collection,
-            where("plan_id", "==", id),
-        );
+        //const votes_collection = collection(db, "votes");
+        const votes_collection = db.collection("votes");
+
+        // const q = query(votes_collection,
+        //     where("plan_id", "==", id),
+        // );
+        const q = db.query(votes_collection, db.where("plan_id", "==", id));
 
         let votes = []
-        const querySnapshot = await getDocs(q);
+        //const querySnapshot = await getDocs(q);
+        const querySnapshot = await db.getDocs(q);
         querySnapshot.forEach((doc) => {
             votes.push(doc.data())
         });

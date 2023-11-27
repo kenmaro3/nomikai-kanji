@@ -1,6 +1,7 @@
-import { db } from "../../../../lib/firebase"
-import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
-import { collection, query, where, deleteDoc } from "firebase/firestore";
+//import { db } from "../../../../lib/firebase"
+// import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
+// import { collection, query, where, deleteDoc } from "firebase/firestore";
+import { db } from "../../../../lib/firebase-admin-config";
 
 const findDataIndexById = (x, target) => {
   let res = []
@@ -30,9 +31,9 @@ export default async function handler(req, res) {
     const { passcode, user_id } = req.body
 
     // first check the passcode is correct or not
-    const docRef = doc(db, "datas", id);
+    const docRef = db.collection("datas").doc(id);
     try {
-      const docSnap = await getDoc(docRef);
+      const docSnap = await db.getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data()
         if (data.host_id !== user_id) {
@@ -43,23 +44,26 @@ export default async function handler(req, res) {
 
         } else {
           // delete plan
-          await deleteDoc(doc(db, "datas", id));
+          await db.deleteDoc(docRef);
 
           // delete votes related to the plan
-          const votes_collection = collection(db, "votes");
-          const q = query(votes_collection,
-            where("plan_id", "==", id),
+          //const votes_collection = collection(db, "votes");
+          const votes_collection = db.collection("votes")
+          const q = db.query(votes_collection,
+            db.where("plan_id", "==", id),
           );
 
           let vote_id_already_exists = []
-          const querySnapshot = await getDocs(q);
+          //const querySnapshot = await getDocs(q);
+          const querySnapshot = await db.getDocs(q);
           querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             vote_id_already_exists.push(doc.id)
           });
 
           vote_id_already_exists.forEach(async (delete_id) => {
-            await deleteDoc(doc(db, "votes", delete_id));
+            await db.deleteDoc(db.doc(`votes/${delete_id}`));
+            //await deleteDoc(doc(db, "votes", delete_id));
           })
           res.status(200).json({ res: "good", info: "successfully deleted" })
 
