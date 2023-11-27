@@ -64,7 +64,22 @@ export default function Home(props) {
 
   useEffect(() => {
     // to avoid `window is not defined` error
-    liffStart()
+    // if env is dev, ignore liff
+    if (process.env.NEXT_PUBLIC_ENV === "dev") {
+      const test_name = "test_name"
+      const test_url = "https://gravatar.com/avatar/ab439ad0c82d2940ad37d5a30f0567af?s=400&d=robohash&r=x"
+      const test_id = "test_id"
+      setName(test_name)
+      setPictureUrl(test_url)
+      setUserId(test_id)
+      dispatch(userSlice.actions.setName(test_name));
+      dispatch(userSlice.actions.setUrl(test_url))
+      dispatch(userSlice.actions.setId(test_id));
+      setError(false)
+      return
+    } else {
+      liffStart()
+    }
   }, []);
 
 
@@ -92,15 +107,24 @@ export default function Home(props) {
   const createNomikai = (e) => {
     e.preventDefault();
     dispatch(nomiSlice.actions.reset())
-    if (userId === undefined) {
-      setError(true)
-      return
-    }
-    else {
-      dispatch(nomiSlice.actions.setHostId(userId))
+    // if env is dev, ignore liff
+    if (process.env.NEXT_PUBLIC_ENV === "dev") {
+      dispatch(nomiSlice.actions.setHostId("test_id"))
+      dispatch(userSlice.actions.setName("test_name"));
+      dispatch(userSlice.actions.setUrl("https://gravatar.com/avatar/ab439ad0c82d2940ad37d5a30f0567af?s=400&d=robohash&r=x"))
+      dispatch(userSlice.actions.setId("test_id"));
+      router.push("/nomi/name");
+    } else {
+      if (userId === undefined) {
+        setError(true)
+        return
+      }
+      else {
+        dispatch(nomiSlice.actions.setHostId(userId))
 
+      }
+      router.push("/nomi/name");
     }
-    router.push("/nomi/name");
   };
 
   return (

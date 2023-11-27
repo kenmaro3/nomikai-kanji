@@ -4,6 +4,6 @@ module.exports = {
     LIFF_ID: process.env.LIFF_ID,
   },
   images:{
-    domains: ["profile.line-scdn.net"],
+    domains: ["profile.line-scdn.net", "gravatar.com"],
   },
 };

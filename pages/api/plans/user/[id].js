@@ -1,6 +1,4 @@
-import { where } from "firebase-admin/firestore"
-// import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
-// import { collection, query, where, deleteDoc } from "firebase/firestore";
+import { Filter } from "firebase-admin/firestore"
 import { db } from "../../../../lib/firebase-admin-config";
 
 export default async function handler(req, res) {
@@ -14,13 +12,11 @@ export default async function handler(req, res) {
         // const q = query(data_collection,
         //     where("host_id", "==", id),
         // );
-        const q = db.query(data_collection, where("host_id", "==", id));
-        //const querySnapshot = await getDocs(q);
-        const querySnapshot = await db.getDocs(q);
+        const datas = await data_collection.where(Filter.where("host_id", "==", id)).get();
 
         let res_list = []
 
-        querySnapshot.forEach((doc) => {
+        datas.forEach((doc) => {
             res_list.push({ id: doc.id, data: doc.data() })
         });
 
@@ -30,27 +26,30 @@ export default async function handler(req, res) {
         // const q_vote = query(vote_collection,
         //     where("voter_id", "==", id),
         // );
-        const q_vote = db.query(vote_collection, where("voter_id", "==", id));
+        const votes = await vote_collection.where(Filter.where("voter_id", "==", id)).get();
         ////const vote_snapshot = await getDocs(q_vote);
-        const vote_snapshot = await db.getDocs(q_vote);
 
         let vote_list = []
+        console.log("vote list")
+        console.log(votes)
 
-        vote_snapshot.forEach((doc) => {
+        votes.forEach((doc) => {
             vote_list.push({ id: doc.id, data: doc.data() })
         });
+        console.log("vote list after")
+        console.log(vote_list)
 
 
         let voted_datas = []
         await Promise.all(
             vote_list.map(async (vote) => {
                 //const ref = doc(db, "datas", vote.data.plan_id)
-                const ref = db.doc("datas/" + vote.data.plan_id)
+                //const doc = await db.doc("datas/" + vote.data.plan_id).get()
+                const datas_collection = db.collection("datas");
+                const target_data = await datas_collection.where(Filter.where("id", "==", vote.data.plan_id)).get();
 
-                //const docSnap = await getDoc(ref)
-                const docSnap = await db.getDoc(ref)
-                //voted_datas.push(docSnap.data())
-                voted_datas.push({ id: docSnap.id, data: docSnap.data() })
+
+                voted_datas.push({ id: target_data.id, data: target_data })
             })
         )
         res.status(200).json({ hosted_datas: res_list, voted_datas: voted_datas })

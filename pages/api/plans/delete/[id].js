@@ -1,8 +1,5 @@
-//import { db } from "../../../../lib/firebase"
-// import { addDoc, getDocs, getDoc, doc } from "firebase/firestore";
-// import { collection, query, where, deleteDoc } from "firebase/firestore";
 import { db } from "../../../../lib/firebase-admin-config";
-import { where } from "firebase-admin/firestore"
+import { Filter } from "firebase-admin/firestore"
 
 const findDataIndexById = (x, target) => {
   let res = []
@@ -32,11 +29,11 @@ export default async function handler(req, res) {
     const { passcode, user_id } = req.body
 
     // first check the passcode is correct or not
-    const docRef = db.collection("datas").doc(id);
+    const target_doc = await db.collection("datas").doc(id).get();
     try {
-      const docSnap = await db.getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data()
+      //const docSnap = await db.getDoc(docRef);
+      if (target_doc != undefined) {
+        const data = target_doc.data()
         if (data.host_id !== user_id) {
           res.status(200).json({ res: "bad", info: "only host can delete the post" })
 
@@ -45,25 +42,25 @@ export default async function handler(req, res) {
 
         } else {
           // delete plan
-          await db.deleteDoc(docRef);
+          //await db.delete(db.doc("datas/" + id));
+          //await db.recursiveDelete(target_doc);
+          target_doc.ref.delete();
 
           // delete votes related to the plan
           //const votes_collection = collection(db, "votes");
           const votes_collection = db.collection("votes")
-          const q = db.query(votes_collection,
-            where("plan_id", "==", id),
-          );
+          const votes = await votes_collection.where(Filter.where("plan_id", "==", id)).get();
 
           let vote_id_already_exists = []
-          //const querySnapshot = await getDocs(q);
-          const querySnapshot = await db.getDocs(q);
-          querySnapshot.forEach((doc) => {
+          votes.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             vote_id_already_exists.push(doc.id)
           });
 
-          vote_id_already_exists.forEach(async (delete_id) => {
-            await db.deleteDoc(db.doc(`votes/${delete_id}`));
+          vote_id_already_exists.forEach(async (id) => {
+            const target_vote = await db.collection("votes").doc(id).get();
+            target_vote.ref.delete();
+            //await db.deleteDoc(db.doc(`votes/${delete_id}`));
             //await deleteDoc(doc(db, "votes", delete_id));
           })
           res.status(200).json({ res: "good", info: "successfully deleted" })

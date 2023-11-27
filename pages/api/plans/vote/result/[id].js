@@ -1,7 +1,7 @@
 import { datas, votes } from "../../../db"
 //import { addDoc, collection, getDocs, getDoc, query, where } from "firebase/firestore";
 import { db } from "../../../../../lib/firebase-admin-config";
-import { where } from "firebase-admin/firestore"
+import { Filter } from "firebase-admin/firestore"
 //import { db } from "../../../../../lib/firebase"
 
 
@@ -45,12 +45,12 @@ export default async function handler(req, res) {
         // const q = query(votes_collection,
         //     where("plan_id", "==", id),
         // );
-        const q = db.query(votes_collection, where("plan_id", "==", id));
+        const votes_res = await votes_collection.where(Filter.where("plan_id", "==", id)).get();
 
         let votes = []
         //const querySnapshot = await getDocs(q);
-        const querySnapshot = await db.getDocs(q);
-        querySnapshot.forEach((doc) => {
+        //const querySnapshot = await db.getDocs(q);
+        votes_res.forEach((doc) => {
             votes.push(doc.data())
         });
 

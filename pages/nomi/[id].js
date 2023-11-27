@@ -84,37 +84,66 @@ function NomiElement() {
     }, [routerId])
 
     useEffect(() => {
-        liffStart()
-        const { id } = router.query
-        setRouterId(id)
-        getPlan()
+        // if env is dev, ignore liff
+        if (process.env.NEXT_PUBLIC_ENV === "dev") {
+            const { id } = router.query
+            setRouterId(id)
+            getPlan()
+            return
+        } else {
+            liffStart()
+            const { id } = router.query
+            setRouterId(id)
+            getPlan()
+
+        }
     }, [router.isReady])
 
 
     const goToPasscode = e => {
-        if (userId == undefined || userId == null) {
-            setUserIdError(true)
-            return
+        // if env is dev, ignore liff
+        if (process.env.NEXT_PUBLIC_ENV === "dev") {
+            setType("vote")
+            setModal(true)
+        } else {
+            if (userId == undefined || userId == null) {
+                setUserIdError(true)
+                return
+            }
+            setType("vote")
+            setModal(true)
+
         }
-        setType("vote")
-        setModal(true)
     }
     const goToPasscodeForResult = e => {
-        if (userId == undefined || userId == null) {
-            setUserIdError(true)
-            return
+        // if env is dev, ignore liff
+        if (process.env.NEXT_PUBLIC_ENV === "dev") {
+            setType("result")
+            setModal(true)
+        } else {
+            if (userId == undefined || userId == null) {
+                setUserIdError(true)
+                return
+            }
+            setType("result")
+            setModal(true)
         }
-        setType("result")
-        setModal(true)
     }
 
     const goToPasscodeForDelete = e => {
-        if (userId == undefined || userId == null) {
-            setUserIdError(true)
-            return
+        // if env is dev, ignore liff
+        if (process.env.NEXT_PUBLIC_ENV === "dev") {
+            setType("delete")
+            setModal(true)
+        } else {
+            if (userId == undefined || userId == null) {
+                setUserIdError(true)
+                return
+            }
+            setType("delete")
+            setModal(true)
         }
-        setType("delete")
-        setModal(true)
+
     }
 
     const closeModal = e => {
@@ -137,15 +166,26 @@ function NomiElement() {
             })
 
             const data = res.data
-            if (data.res === "good") {
+            // if env is dev, ignore liff
+            if (process.env.NEXT_PUBLIC_ENV === "dev") {
                 dispatch(voteSlice.actions.setPlanId(routerId))
-                dispatch(voteSlice.actions.setVoterId(user.id))
-                dispatch(voteSlice.actions.setVoterUrl(pictureUrl))
+                dispatch(voteSlice.actions.setVoterId("test_id"))
+                dispatch(voteSlice.actions.setVoterUrl("https://gravatar.com/avatar/a6267969ff5bfe60972f308327f3934b?s=400&d=robohash&r=x"))
                 router.push(`/vote/${routerId}`)
                 setError(false)
-            }
-            else {
-                setError(true)
+                return
+            } else {
+                if (data.res === "good") {
+                    dispatch(voteSlice.actions.setPlanId(routerId))
+                    dispatch(voteSlice.actions.setVoterId(user.id))
+                    dispatch(voteSlice.actions.setVoterUrl(pictureUrl))
+                    router.push(`/vote/${routerId}`)
+                    setError(false)
+                }
+                else {
+                    setError(true)
+                }
+
             }
         }
         else {
@@ -276,14 +316,16 @@ function NomiElement() {
 
                         })()
                     }
-                    <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
-                        <div className="flex flex-col items-center space-x-3">
-                            <h3 className="group-hover:text-white">📆 日時 📍 開催場所投票はコチラ</h3>
-                            <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{planToShow?.name}</h3>
-                        </div>
-                        {/* <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {planToShow?.host_id}</p> */}
-                        <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(planToShow?.deadline)}</p>
-                    </a>
+                    {planToShow &&
+                        <a onClick={(e) => goToPasscode(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+                            <div className="flex flex-col items-center space-x-3">
+                                <h3 className="group-hover:text-white">📆 日時 📍 開催場所投票はコチラ</h3>
+                                <h3 className="text-slate-900 group-hover:text-white text-lg font-bold pt-2">{planToShow?.name}</h3>
+                            </div>
+                            {/* <p className="text-slate-500 group-hover:text-white text-sm">カンジ: {planToShow?.host_id}</p> */}
+                            <p className="text-slate-500 group-hover:text-white text-sm">回答締め切り: {ts_to_date(planToShow?.deadline)}</p>
+                        </a>
+                    }
 
                     <a onClick={(e) => goToPasscodeForResult(e)} className="group block max-w-xs my-2 rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
                         <div className="flex flex-col items-center space-x-3">

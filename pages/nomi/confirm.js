@@ -222,7 +222,7 @@ function Confirm() {
             </button>
 
             <button
-              disabled={isAnimating}
+              disabled={loading}
               onClick={(e) => goToOk(e)}
               className="bg-sky-500 hover:bg-sky-700 py-2 px-4 rounded text-white max-w-xs"
             >

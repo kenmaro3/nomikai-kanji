@@ -8,17 +8,21 @@ export default async function handler(req, res) {
   if (method == "GET") {
 
     const docRef = db.collection("datas").doc(id);
+    console.log(docRef)
+    console.log(docRef.path)
     // Get a document, forcing the SDK to fetch from the offline cache.
     try {
-      const docSnap = await db.getDoc(docRef);
-      //const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        res.status(200).json({ datas: docSnap.data() })
+      const doc = await docRef.get();
+      console.log("\nhere============")
+      console.log(doc.data())
+      if (doc != undefined) {
+        res.status(200).json({ datas: doc.data() })
       } else {
         // doc.data() will be undefined in this case
         res.status(404).json({ info: "document not found" })
       }
     } catch (e) {
+      console.error("Error adding document: ", e);
       res.status(500).json({ info: "something went wrong" })
     }
 
@@ -32,8 +36,8 @@ export default async function handler(req, res) {
     const docRef = db.collection("datas").doc(id);
 
     try {
-      const docSnap = await db.getDoc(docRef);
-      if (docSnap.exists()) {
+      const docSnap = await docRef.get();
+      if (docSnap != undefined) {
         const data = docSnap.data()
         if (data.passcode == passcode) {
           res.status(200).json({ res: "good" })
@@ -46,6 +50,7 @@ export default async function handler(req, res) {
         res.status(404).json({ info: "document not found" })
       }
     } catch (e) {
+      console.error("Error adding document: ", e);
       res.status(500).json({ info: "something went wrong" })
     }
 

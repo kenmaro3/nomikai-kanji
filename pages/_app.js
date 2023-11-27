@@ -14,6 +14,10 @@ function MyApp({ Component, pageProps }) {
 
 
   useEffect(() => {
+    // if env is dev, ignore liff
+    if (process.env.NEXT_PUBLIC_ENV == "dev") {
+      return;
+    }
     // to avoid `window is not defined` error
     import("@line/liff").then((liff) => {
       liff
